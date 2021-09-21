@@ -1,0 +1,433 @@
+
+
+------------------------------
+
+STRATEGY 0/8: False UNTIL IT STOPS APPLYING
+
+Complexity: 1
+
+Translation: Do not click.
+
+
+
+FORMULA
+
+LL soft: -8796.243423839902
+LL greedy: 0.0
+Score LL soft: 0.4149387573118115
+Score LL greedy: 1.0
+Mean len (formula): 1.0
+Opt score (formula): 1.0
+
+
+SOFTMAX
+
+LL: 0.0
+Score LL: 1.0
+Opt score (softmax): 1.0
+Mean len (softmax): 1.0
+
+
+MEAN
+
+LL: -4398.121711919951
+Score LL: 0.7074693786559058
+Opt score: 1.0
+Mean len: 1.0
+
+
+PEOPLE
+
+LL: -5481.7604407542385
+Score LL: 0.13317458873167992
+Opt score: 0.4667157043030526
+Mean len: 2.1426319936958236
+Epsilon: 0.5321100917431193
+Opt action score: 0.4667157043030526
+
+
+
+------------------------------
+
+STRATEGY 1/8: True UNTIL IT STOPS APPLYING
+
+Complexity: 1
+
+Translation: 1. Terminate or click on some random nodes and then terminate. 
+   
+   Repeat this step as long as possible.
+
+
+
+
+
+FORMULA
+
+LL soft: -273409.7750414568
+LL greedy: -828707.4395486646
+Score LL soft: 0.02071405111260158
+Score LL greedy: 7.881057514547442e-06
+Mean len (formula): 7.0522
+Opt score (formula): 0.08883700020800207
+
+
+SOFTMAX
+
+LL: -25649.49357461227
+Score LL: 0.07692307692310077
+Opt score (softmax): 1.0
+Mean len (softmax): 1.0
+
+
+MEAN
+
+LL: -149529.63430803453
+Score LL: 0.048818564017851174
+Opt score: 0.5444185001040011
+Mean len: 4.0261
+
+
+PEOPLE
+
+LL: -4361.24808231895
+Score LL: 0.16629133149038364
+Opt score: 1.0
+Mean len: 11.975369458128078
+Epsilon: 0.0
+Opt action score: 1.0
+
+
+
+------------------------------
+
+STRATEGY 2/8: None (treated as fully random planning)
+
+Complexity: 1
+
+Translation: NO INSTRUCTION FOUND. (Treated as the no-planning strategy).
+
+
+
+FORMULA
+
+LL soft: -175891.75890587698
+LL greedy: -771326.8621222543
+Score LL soft: 0.08296765962552394
+Score LL greedy: 1.816185451391021e-05
+Mean len (formula): 7.0659
+Opt score (formula): 0.14059424669750348
+
+
+SOFTMAX
+
+LL: -171054.85261642825
+Score LL: 0.1357010416717751
+Opt score (softmax): 1.0
+Mean len (softmax): 8.5643
+
+
+MEAN
+
+LL: -173473.30576115262
+Score LL: 0.10933435064864952
+Opt score: 0.5702971233487517
+Mean len: 7.815099999999999
+
+
+PEOPLE
+
+LL: -2403.8335839918273
+Score LL: 0.12994996868051556
+Opt score: 1.0
+Mean len: 9.275590551181102
+Epsilon: 0.0
+Opt action score: 1.0
+
+
+
+------------------------------
+
+STRATEGY 3/8: among(not(is_observed) and is_leaf) UNTIL (is_previous_observed_max or are_leaves_observed)
+
+Complexity: 5
+
+Translation: 1. Click on the nodes satisfying all of the following conditions:
+   - they are unobserved leaves.
+   
+   Repeat this step until the previously observed node uncovers a 48 or all the
+   leaves are observed.
+
+
+
+
+
+FORMULA
+
+LL soft: -47688.20203384346
+LL greedy: -99149.4153846462
+Score LL soft: 0.32803761054095715
+Score LL greedy: 0.09852534452635489
+Mean len (formula): 4.2784
+Opt score (formula): 0.8711126350077147
+
+
+SOFTMAX
+
+LL: -55898.84486948016
+Score LL: 0.27738515069074304
+Opt score (softmax): 0.9812117180151866
+Mean len (softmax): 4.3591
+
+
+MEAN
+
+LL: -51793.52345166181
+Score LL: 0.3027113806158501
+Opt score: 0.9261621765114507
+Mean len: 4.31875
+
+
+PEOPLE
+
+LL: -6971.806273535252
+Score LL: 0.2318662443355876
+Opt score: 0.9276729559748428
+Mean len: 5.1567567567567565
+Epsilon: 0.0722361809045226
+Opt action score: 0.8740553376805263
+
+
+
+------------------------------
+
+STRATEGY 4/8: among(is_leaf and not(is_observed)) AND NEXT among(is_leaf and not(is_observed)) and is_previous_observed_sibling 
+
+LOOP FROM among(is_leaf and not(is_observed))
+
+Complexity: 10
+
+Translation: 1. Click on a node satisfying all of the following conditions:
+   - it is an unobserved leaf.
+
+2. Click on a node satisfying all of the following conditions:
+   - it is an unobserved leaf
+   - it is the previously observed node was its sibling.
+
+3. GOTO step 1.
+
+
+
+FORMULA
+
+LL soft: -61290.658186272776
+LL greedy: -153271.11278111843
+Score LL soft: 0.41661996350154823
+Score LL greedy: 0.11196294334285037
+Mean len (formula): 7.0
+Opt score (formula): 0.7569165173922612
+
+
+SOFTMAX
+
+LL: -229004.7073112722
+Score LL: 0.0640282892180182
+Opt score (softmax): 0.833767012410816
+Mean len (softmax): 8.3322
+
+
+MEAN
+
+LL: -145147.6827487725
+Score LL: 0.24032412635978323
+Opt score: 0.7953417649015386
+Mean len: 7.6661
+
+
+PEOPLE
+
+LL: -5725.393789816546
+Score LL: 0.17389908715650226
+Opt score: 0.7063855789795295
+Mean len: 9.091666666666667
+Epsilon: 0.29307715767002135
+Opt action score: 0.6310290672913145
+
+
+
+------------------------------
+
+STRATEGY 5/8: True UNTIL IT STOPS APPLYING
+
+Complexity: 1
+
+Translation: 1. Terminate or click on some random nodes and then terminate. 
+   
+   Repeat this step as long as possible.
+
+
+
+
+
+FORMULA
+
+LL soft: -268283.8401665341
+LL greedy: -826895.2545907993
+Score LL soft: 0.022016895206847985
+Score LL greedy: 7.80008958482667e-06
+Mean len (formula): 7.0306
+Opt score (formula): 0.10813815823338638
+
+
+SOFTMAX
+
+LL: -25649.49357461227
+Score LL: 0.07692307692310077
+Opt score (softmax): 1.0
+Mean len (softmax): 1.0
+
+
+MEAN
+
+LL: -146966.6668705732
+Score LL: 0.04946998606497438
+Opt score: 0.5540690791166932
+Mean len: 4.0153
+
+
+PEOPLE
+
+LL: -4292.777056107661
+Score LL: 0.11552608246673979
+Opt score: 1.0
+Mean len: 6.63
+Epsilon: 0.0
+Opt action score: 1.0
+
+
+
+------------------------------
+
+STRATEGY 6/8: True UNTIL IT STOPS APPLYING
+
+Complexity: 1
+
+Translation: 1. Terminate or click on some random nodes and then terminate. 
+   
+   Repeat this step as long as possible.
+
+
+
+
+
+FORMULA
+
+LL soft: -171598.24191981804
+LL greedy: -817038.4144021276
+Score LL soft: 0.08671003152027353
+Score LL greedy: 8.785811575488611e-06
+Mean len (formula): 7.0178
+Opt score (formula): 0.13249988419918687
+
+
+SOFTMAX
+
+LL: -25649.49357461227
+Score LL: 0.07692307692310077
+Opt score (softmax): 1.0
+Mean len (softmax): 1.0
+
+
+MEAN
+
+LL: -98623.86774721516
+Score LL: 0.08181655422168715
+Opt score: 0.5662499420995935
+Mean len: 4.008900000000001
+
+
+PEOPLE
+
+LL: -2690.354636994688
+Score LL: 0.11002829161153567
+Opt score: 1.0
+Mean len: 6.734806629834254
+Epsilon: 0.0
+Opt action score: 1.0
+
+
+
+------------------------------
+
+STRATEGY 7/8: among(not(is_observed) and is_leaf) AND NEXT among(not(is_observed) and is_leaf) and is_previous_observed_sibling UNLESS is_previous_observed_max 
+
+LOOP FROM among(not(is_observed) and is_leaf) UNLESS (is_previous_observed_max or are_leaves_observed)
+
+Complexity: 13
+
+Translation: 1. Click on a node satisfying all of the following conditions:
+   - it is an unobserved leaf.
+
+2. Unless the previously observed node uncovers a 48, in which case stop at the previous
+   step, click on a node satisfying all of the following conditions:
+   - it is an unobserved leaf
+   
+   click in this way under the condition that:
+   - the previously observed node was its sibling.
+
+3. GOTO step 1 unless the previously observed node uncovers a 48 or all the leaves
+   are observed.
+
+
+
+FORMULA
+
+LL soft: -31414.951104353215
+LL greedy: -34815.24039843824
+Score LL soft: 0.4815639678172178
+Score LL greedy: 0.44494374733177994
+Mean len (formula): 4.2992
+Opt score (formula): 0.9862067361369558
+
+
+SOFTMAX
+
+LL: -27830.985668655983
+Score LL: 0.5216341172583662
+Opt score (softmax): 1.0
+Mean len (softmax): 4.2765
+
+
+MEAN
+
+LL: -29622.9683865046
+Score LL: 0.501599042537792
+Opt score: 0.9931033680684779
+Mean len: 4.287850000000001
+
+
+PEOPLE
+
+LL: -8190.6126199830915
+Score LL: 0.32866910541097377
+Opt score: 0.9130552914006249
+Mean len: 4.3763376932223546
+Epsilon: 0.08687389710872812
+Opt action score: 0.8956935611815363
+
+
+
+AVERAGE OVER ALL CLUSTERS:
+
+ScoreLL: 0.25519292289031165
+OPT: 0.7437052442688133
+PPL_ScoreLL: 0.17367558748548978
+PPL_OPT: 0.8767286913322563
+PPL_LL: -5014.723310437782
+PPL_ACT: 0.8584367088070537
+W: 0.8769628340717011
+
+
+MODEL LOG MARGINAL LIKELIHOOD: -42955.00767286725
+AIC: 84793.97541777031
+BIC: 85910.0153457345
+

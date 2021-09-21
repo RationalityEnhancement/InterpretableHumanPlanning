@@ -1,0 +1,93 @@
+          STRATEGY 0/2: False UNTIL IT APPLIES
+Complexity:1
+
+FORMULA
+
+LL soft: -16898.573359590526
+LL greedy: 0.0
+Score LL soft: 0.1845458501717707
+Score LL greedy: 1.0
+Mean len (formula): 1.0
+Opt score (formula): 1.0
+
+
+SOFTMAX
+
+LL: 0.0
+Score LL: 1.0
+Opt score (softmax): 1.0
+Mean len (softmax): 1.0
+
+
+MEAN
+
+LL: -8449.286679795263
+Score LL: 0.5922729250858854
+Opt score: 1.0
+Mean len: 1.0
+
+
+PEOPLE
+
+LL: -36155.23463434556
+Score LL: 0.03152879982263434
+Opt score: 0.11110048761831916
+Mean len: 9.000860585197934
+(1-eps): 0.11110048761831914
+
+Log marginal lik: -36171.34115119824
+
+          STRATEGY 1/2: not(is_previous_observed_sibling) and not(observed_count( 1)) and among(not(has_child_highest_level_value) and is_leaf) AND NEXT is_previous_observed_sibling and among(not(is_observed) and not(is_root)) and not(is_previous_observed_positive) UNTIL is_positive_observed AND NEXT is_previous_observed_sibling and among(not(is_observed) and not(is_root)) and is_previous_observed_positive and not(observed_count( 4)) UNTIL IT APPLIES AND NEXT is_previous_observed_sibling and among(not(is_observed) and not(is_root)) and not(is_previous_observed_positive) and is_positive_observed UNTIL IT APPLIES
+Complexity:15
+
+FORMULA
+
+LL soft: -86231.61639639971
+LL greedy: -128876.93818764159
+Score LL soft: 0.056115684989219275
+Score LL greedy: 0.013503660057413956
+Mean len (formula): 2.9938
+Opt score (formula): 0.4366994192816743
+
+
+SOFTMAX
+
+LL: -287035.736944388
+Score LL: 0.004065566484006543
+Opt score (softmax): 0.6498433118918027
+Mean len (softmax): 5.2139
+
+
+MEAN
+
+LL: -186633.67667039385
+Score LL: 0.03009062573661291
+Opt score: 0.5432713655867385
+Mean len: 4.1038499999999996
+
+
+PEOPLE
+
+LL: -41849.38753209434
+Score LL: 0.03478048453065458
+Opt score: 0.3151685393258427
+Mean len: 10.064620355411956
+(1-eps): 0.31516853932584266
+
+Log marginal lik: -41858.93284725857
+
+
+
+AVERAGE OVER ALL CLUSTERS:
+
+ScoreLL: 0.31118177541124914
+OPT: 0.7716356827933692
+PPL_ScoreLL: 0.03315464217664446
+PPL_OPT: 0.21313451347208093
+PPL_LL:-39002.311083219945
+W: 0.2131345134720809
+PPL_LOG_ML: -39015.1369992284
+
+MODEL LOG MARGINAL LIKELIHOOD: -78030.2739984568
+WEIGHTED MODEL LOG MARGINAL LIKELIHOOD: -38773.68263477302
+

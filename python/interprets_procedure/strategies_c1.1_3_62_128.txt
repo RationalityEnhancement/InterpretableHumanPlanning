@@ -1,0 +1,142 @@
+          STRATEGY 0/3: not(among(not(is_observed) and is_leaf : has_parent_highest_value)) and among(not(is_leaf) and not(is_observed)) and not(among(not(depth( 2)) and not(depth( 1)))) and among(not(has_root_smallest_level_value) and not(has_child_highest_level_value) : has_best_path) UNTIL IT APPLIES  AND NEXT among(not(is_observed) and is_leaf : has_parent_highest_value) and among(not(has_child_highest_level_value) : has_best_path) and all_(has_root_highest_level_value and has_parent_smallest_level_value : has_best_path) AND NEXT among(not(is_observed) and is_leaf : has_parent_highest_value) and among(not(has_child_highest_level_value) : has_best_path) and not(all_(has_root_highest_level_value and has_parent_smallest_level_value : has_best_path)) and is_previous_observed_sibling AND NEXT among(not(is_observed) and is_leaf : has_parent_highest_value) and not(among(not(has_child_highest_level_value) : has_best_path)) and is_previous_observed_sibling and all_(is_2max_in_branch and is_leaf : has_child_highest_value) AND NEXT not(among(not(is_observed) and is_leaf : has_parent_highest_value)) and among(not(is_leaf) and not(is_observed)) and not(among(not(depth( 2)) and not(depth( 1)))) and among(not(has_root_smallest_level_value) and not(has_child_highest_level_value) : has_best_path) UNTIL IT APPLIES AND NEXT not(among(not(is_observed) and is_leaf : has_parent_highest_value)) and not(among(not(is_leaf) and not(is_observed))) and among(not(is_observed) and is_max_in_branch : has_parent_highest_value) and all_(is_leaf and is_max_in_branch : has_best_path) AND NEXT among(not(is_observed) and is_leaf : has_parent_highest_value) and among(not(has_child_highest_level_value) : has_best_path) and not(all_(has_root_highest_level_value and has_parent_smallest_level_value : has_best_path)) and is_previous_observed_sibling AND NEXT among(not(is_observed) and is_leaf : has_parent_highest_value) and not(among(not(has_child_highest_level_value) : has_best_path)) and is_previous_observed_sibling and all_(is_2max_in_branch and is_leaf : has_child_highest_value) 
+
+LOOP FROM not(among(not(is_observed) and is_leaf : has_parent_highest_value)) and among(not(is_leaf) and not(is_observed)) and not(among(not(depth( 2)) and not(depth( 1)))) and among(not(has_root_smallest_level_value) and not(has_child_highest_level_value) : has_best_path)
+
+OR
+
+not(among(not(is_observed) and is_leaf : has_parent_highest_value)) and among(not(is_leaf) and not(is_observed)) and not(among(not(depth( 2)) and not(depth( 1)))) and among(not(has_root_smallest_level_value) and not(has_child_highest_level_value) : has_best_path) UNTIL IT APPLIES  AND NEXT among(not(is_observed) and is_leaf : has_parent_highest_value) and among(not(has_child_highest_level_value) : has_best_path) and all_(has_root_highest_level_value and has_parent_smallest_level_value : has_best_path) UNTIL IT APPLIES AND NEXT among(not(is_observed) and is_leaf : has_parent_highest_value) and among(not(has_child_highest_level_value) : has_best_path) and not(all_(has_root_highest_level_value and has_parent_smallest_level_value : has_best_path)) and is_previous_observed_sibling AND NEXT among(not(is_observed) and is_leaf : has_parent_highest_value) and not(among(not(has_child_highest_level_value) : has_best_path)) and is_previous_observed_sibling and all_(is_2max_in_branch and is_leaf : has_child_highest_value) UNTIL is_previous_observed_max_leaf AND NEXT not(among(not(is_observed) and is_leaf : has_parent_highest_value)) and among(not(is_leaf) and not(is_observed)) and not(among(not(depth( 2)) and not(depth( 1)))) and among(not(has_root_smallest_level_value) and not(has_child_highest_level_value) : has_best_path) UNTIL IT APPLIES AND NEXT not(among(not(is_observed) and is_leaf : has_parent_highest_value)) and not(among(not(is_leaf) and not(is_observed))) and among(not(is_observed) and is_max_in_branch : has_parent_highest_value) and all_(is_leaf and is_max_in_branch : has_best_path) AND NEXT among(not(is_observed) and is_leaf : has_parent_highest_value) and among(not(has_child_highest_level_value) : has_best_path) and not(all_(has_root_highest_level_value and has_parent_smallest_level_value : has_best_path)) and is_previous_observed_sibling AND NEXT among(not(is_observed) and is_leaf : has_parent_highest_value) and not(among(not(has_child_highest_level_value) : has_best_path)) and is_previous_observed_sibling and all_(is_2max_in_branch and is_leaf : has_child_highest_value) UNTIL IT APPLIES AND NEXT not(among(not(is_observed) and is_leaf : has_parent_highest_value)) and among(not(is_leaf) and not(is_observed)) and among(not(depth( 2)) and not(depth( 1))) and not(all_(not(is_root) and are_branch_leaves_observed : has_child_highest_value)) UNTIL IT APPLIES
+
+OR
+
+not(among(not(is_observed) and is_leaf : has_parent_highest_value)) and among(not(is_leaf) and not(is_observed)) and not(among(not(depth( 2)) and not(depth( 1)))) and among(not(has_root_smallest_level_value) and not(has_child_highest_level_value) : has_best_path) UNTIL IT APPLIES  AND NEXT among(not(is_observed) and is_leaf : has_parent_highest_value) and among(not(has_child_highest_level_value) : has_best_path) and all_(has_root_highest_level_value and has_parent_smallest_level_value : has_best_path) UNTIL IT APPLIES AND NEXT among(not(is_observed) and is_leaf : has_parent_highest_value) and among(not(has_child_highest_level_value) : has_best_path) and not(all_(has_root_highest_level_value and has_parent_smallest_level_value : has_best_path)) and is_previous_observed_sibling AND NEXT among(not(is_observed) and is_leaf : has_parent_highest_value) and not(among(not(has_child_highest_level_value) : has_best_path)) and is_previous_observed_sibling and all_(is_2max_in_branch and is_leaf : has_child_highest_value) AND NEXT not(among(not(is_observed) and is_leaf : has_parent_highest_value)) and among(not(is_leaf) and not(is_observed)) and not(among(not(depth( 2)) and not(depth( 1)))) and among(not(has_root_smallest_level_value) and not(has_child_highest_level_value) : has_best_path) UNTIL (are_leaves_observed or is_previous_observed_min_level( 3)) AND NEXT among(not(is_observed) and is_leaf : has_parent_highest_value) and among(not(has_child_highest_level_value) : has_best_path) and all_(has_root_highest_level_value and has_parent_smallest_level_value : has_best_path) UNTIL IT APPLIES AND NEXT among(not(is_observed) and is_leaf : has_parent_highest_value) and among(not(has_child_highest_level_value) : has_best_path) and not(all_(has_root_highest_level_value and has_parent_smallest_level_value : has_best_path)) and is_previous_observed_sibling AND NEXT among(not(is_observed) and is_leaf : has_parent_highest_value) and not(among(not(has_child_highest_level_value) : has_best_path)) and is_previous_observed_sibling and all_(is_2max_in_branch and is_leaf : has_child_highest_value) AND NEXT not(among(not(is_observed) and is_leaf : has_parent_highest_value)) and among(not(is_leaf) and not(is_observed)) and among(not(depth( 2)) and not(depth( 1))) and not(all_(not(is_root) and are_branch_leaves_observed : has_child_highest_value)) UNTIL IT APPLIES
+Complexity:107
+
+FORMULA
+
+LL soft: -98441.445224744
+LL greedy: -313771.0204350947
+Score LL soft: 0.16205461218887499
+Score LL greedy: 0.003026109961724327
+Mean len (formula): 5.4094
+Opt score (formula): 0.45444754939570786
+
+
+SOFTMAX
+
+LL: -310124.82530793786
+Score LL: 0.014473109774684011
+Opt score (softmax): 0.7306373854495295
+Mean len (softmax): 7.3221
+
+
+MEAN
+
+LL: -204283.13526634092
+Score LL: 0.0882638609817795
+Opt score: 0.5925424674226187
+Mean len: 6.36575
+
+
+PEOPLE
+
+LL: -17439.772908078034
+Score LL: 0.10604164005483536
+Opt score: 0.5744981986618631
+Mean len: 5.752775721687639
+(1-eps): 0.5744981986618631
+
+Log marginal lik: -17445.41740872126
+
+          STRATEGY 1/3: False UNTIL IT APPLIES
+Complexity:1
+
+FORMULA
+
+LL soft: -1659.1190615099638
+LL greedy: 0.0
+Score LL soft: 0.8471208570393122
+Score LL greedy: 1.0
+Mean len (formula): 1.0
+Opt score (formula): 1.0
+
+
+SOFTMAX
+
+LL: 0.0
+Score LL: 1.0
+Opt score (softmax): 1.0
+Mean len (softmax): 1.0
+
+
+MEAN
+
+LL: -829.5595307549819
+Score LL: 0.9235604285196561
+Opt score: 1.0
+Mean len: 1.0
+
+
+PEOPLE
+
+LL: -5609.207750924092
+Score LL: 0.1738440009927711
+Opt score: 0.570804741110418
+Mean len: 1.7519125683060108
+(1-eps): 0.570804741110418
+
+Log marginal lik: -5614.447519237622
+
+          STRATEGY 2/3: among(not(is_leaf) and not(is_root)) and among(not(is_observed) : has_best_path) UNTIL IT APPLIES
+Complexity:2
+
+FORMULA
+
+LL soft: -43446.745549916865
+LL greedy: -31779.47135009817
+Score LL soft: 0.20704022903307673
+Score LL greedy: 0.3160259460765838
+Mean len (formula): 2.7588
+Opt score (formula): 0.8243299072323697
+
+
+SOFTMAX
+
+LL: -79748.21543560232
+Score LL: 0.08480669248143453
+Opt score (softmax): 0.8538411559048297
+Mean len (softmax): 3.2321
+
+
+MEAN
+
+LL: -61597.4804927596
+Score LL: 0.14592346075725562
+Opt score: 0.8390855315685997
+Mean len: 2.99545
+
+
+PEOPLE
+
+LL: -6670.177375626305
+Score LL: 0.08284938903445985
+Opt score: 0.24122479462285287
+Mean len: 5.261296660117878
+(1-eps): 0.24122479462285285
+
+Log marginal lik: -6680.643645077256
+
+
+
+AVERAGE OVER ALL CLUSTERS:
+
+ScoreLL: 0.3859159167528971
+OPT: 0.8105426663304062
+PPL_ScoreLL: 0.1209116766940221
+PPL_OPT: 0.4621759114650447
+PPL_LL:-9906.38601154281
+W: 0.4621759114650447
+PPL_LOG_ML: -9913.502857678714
+
+MODEL LOG MARGINAL LIKELIHOOD: -29740.50857303614
+WEIGHTED MODEL LOG MARGINAL LIKELIHOOD: -10043.502642884421
+

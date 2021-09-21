@@ -1,0 +1,2 @@
+among(is_root  and  not(is_observed) )
+ 

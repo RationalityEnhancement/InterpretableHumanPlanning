@@ -1,0 +1,121 @@
+
+
+------------------------------
+
+STRATEGY 0/2: among(is_leaf and not(is_observed)) UNTIL (is_previous_observed_max or are_leaves_observed)
+
+Complexity: 5
+
+Translation: 1. Click on the nodes satisfying all of the following conditions:
+   - they are unobserved leaves.
+   
+   Repeat this step until the previously observed node uncovers a 48 or all the
+   leaves are observed.
+
+
+
+
+
+FORMULA
+
+LL soft: -54782.481910089955
+LL greedy: -162441.6560465463
+Score LL soft: 0.278952688056641
+Score LL greedy: 0.022692414325848075
+Mean len (formula): 4.2909
+Opt score (formula): 0.768300356568552
+
+
+SOFTMAX
+
+LL: -44547.066753664905
+Score LL: 0.3532768414696633
+Opt score (softmax): 1.0
+Mean len (softmax): 4.2813
+
+
+MEAN
+
+LL: -49664.77433187743
+Score LL: 0.31611476476315215
+Opt score: 0.884150178284276
+Mean len: 4.286099999999999
+
+
+PEOPLE
+
+LL: -23033.902574196065
+Score LL: 0.2045580704088183
+Opt score: 0.8739924216327937
+Mean len: 5.136234961075726
+Epsilon: 0.12595551270573652
+Opt action score: 0.8358320461418985
+
+
+
+------------------------------
+
+STRATEGY 1/2: True UNTIL IT STOPS APPLYING
+
+Complexity: 1
+
+Translation: 1. Terminate or click on some random nodes and then terminate. 
+   
+   Repeat this step as long as possible.
+
+
+
+
+
+FORMULA
+
+LL soft: -186337.64861954792
+LL greedy: -822220.508240775
+Score LL soft: 0.07144818216703384
+Score LL greedy: 8.774077165827684e-06
+Mean len (formula): 7.0615
+Opt score (formula): 0.11701633889784144
+
+
+SOFTMAX
+
+LL: -25649.49357461227
+Score LL: 0.07692307692310077
+Opt score (softmax): 1.0
+Mean len (softmax): 1.0
+
+
+MEAN
+
+LL: -105993.5710970801
+Score LL: 0.0741856295450673
+Opt score: 0.5585081694489207
+Mean len: 4.030749999999999
+
+
+PEOPLE
+
+LL: -22693.13954986865
+Score LL: 0.11340384782554673
+Opt score: 1.0
+Mean len: 4.693831607384062
+Epsilon: 0.0
+Opt action score: 1.0
+
+
+
+AVERAGE OVER ALL CLUSTERS:
+
+ScoreLL: 0.19515019715410972
+OPT: 0.7213291738665983
+PPL_ScoreLL: 0.15898095911718252
+PPL_OPT: 0.9369962108163968
+PPL_LL: -22863.521062032356
+PPL_ACT: 0.9179160230709493
+W: 0.9370222436471317
+
+
+MODEL LOG MARGINAL LIKELIHOOD: -43710.16913551222
+AIC: 87139.6966517118
+BIC: 87420.33827102443
+

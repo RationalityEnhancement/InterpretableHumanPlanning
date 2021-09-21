@@ -1,0 +1,2 @@
+among(not(is_observed)  and  is_leaf ) AND not(is_previous_observed_max)
+ 

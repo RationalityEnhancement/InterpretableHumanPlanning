@@ -1,0 +1,6 @@
+among(is_leaf : has_best_path ) AND observed_count( 1 ) AND is_previous_observed_sibling
+          OR          
+among(is_leaf : has_best_path ) AND not(observed_count( 1 ))
+          OR          
+not(among(is_leaf : has_best_path )) AND among(not(has_leaf_smallest_level_value)  and  not(has_leaf_smallest_level_value) : has_child_smallest_value ) AND is_positive_observed AND among(not(is_observed) )
+ 

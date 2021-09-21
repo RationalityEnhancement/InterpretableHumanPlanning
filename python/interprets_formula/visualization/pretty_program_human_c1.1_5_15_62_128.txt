@@ -1,0 +1,2 @@
+among(depth( 2 )  and  not(is_observed) ) AND not(is_previous_observed_max)
+ 

@@ -1,0 +1,6 @@
+among(not(is_observed) : has_parent_highest_value ) AND among(not(depth( 2 ))  and  not(are_branch_leaves_observed) : has_parent_highest_value )
+          OR          
+among(not(is_observed) : has_parent_highest_value ) AND not(among(not(depth( 2 ))  and  not(are_branch_leaves_observed) : has_parent_highest_value )) AND among(not(has_leaf_smallest_level_value)  and  not(is_root) : has_root_highest_value )
+          OR          
+not(among(not(is_observed) : has_parent_highest_value )) AND among(not(depth( 2 ))  and  not(is_observed) : has_parent_highest_value ) AND not(among(not(has_leaf_smallest_level_value)  and  not(has_leaf_highest_level_value) : has_parent_smallest_value ))
+ 

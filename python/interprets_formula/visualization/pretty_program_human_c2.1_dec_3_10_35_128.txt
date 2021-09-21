@@ -1,0 +1,4 @@
+among(is_root  and  not(is_observed) ) AND is_positive_observed AND observed_count( 2 )
+          OR          
+among(is_root  and  not(is_observed) ) AND not(is_positive_observed)
+ 

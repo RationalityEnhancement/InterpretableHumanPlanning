@@ -1,0 +1,4 @@
+among(is_root  and  not(is_observed) )
+          OR          
+not(among(is_root  and  not(is_observed) )) AND among(depth( 2 )  and  not(are_branch_leaves_observed) ) AND are_roots_observed
+ 

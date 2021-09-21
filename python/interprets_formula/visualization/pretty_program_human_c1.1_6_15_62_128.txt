@@ -1,0 +1,4 @@
+among(is_leaf  and  not(is_observed) ) AND is_positive_observed AND is_previous_observed_sibling
+          OR          
+among(is_leaf  and  not(is_observed) ) AND not(is_positive_observed)
+ 

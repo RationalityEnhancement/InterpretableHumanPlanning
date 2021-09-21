@@ -1,0 +1,4 @@
+among(not(is_observed)  and  is_leaf : has_parent_highest_value )
+          OR          
+not(among(not(is_observed)  and  is_leaf : has_parent_highest_value )) AND among(not(is_root)  and  not(is_leaf) : has_best_path ) AND not(is_observed)
+ 

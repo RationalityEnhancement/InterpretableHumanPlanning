@@ -1,0 +1,171 @@
+          STRATEGY 0/4: False UNTIL IT APPLIES
+Complexity:1
+
+FORMULA
+
+LL soft: -8722.286621184687
+LL greedy: 0.0
+Score LL soft: 0.4180188874803712
+Score LL greedy: 1.0
+Mean len (formula): 1.0
+Opt score (formula): 1.0
+
+
+SOFTMAX
+
+LL: 0.0
+Score LL: 1.0
+Opt score (softmax): 1.0
+Mean len (softmax): 1.0
+
+
+MEAN
+
+LL: -4361.143310592343
+Score LL: 0.7090094437401856
+Opt score: 1.0
+Mean len: 1.0
+
+
+PEOPLE
+
+LL: -8591.037541497155
+Score LL: 0.03827982299713711
+Opt score: 0.21610330421572352
+Mean len: 4.627416520210896
+(1-eps): 0.21610330421572355
+
+Log marginal lik: -8602.19447916067
+
+          STRATEGY 1/4: None
+Complexity:1
+
+FORMULA
+
+LL soft: -45891.19716530311
+LL greedy: -138155.10557964438
+Score LL soft: 0.010161799701640287
+Score LL greedy: 9.999999999998352e-07
+Mean len (formula): 1.0
+Opt score (formula): 0.0
+
+
+SOFTMAX
+
+LL: -1330944.8406226204
+Score LL: 9.9999999999983e-07
+Opt score (softmax): 0.0
+Mean len (softmax): 9.6337
+
+
+MEAN
+
+LL: -688418.0188939618
+Score LL: 0.005081399850820143
+Opt score: 0.0
+Mean len: 5.31685
+
+
+PEOPLE
+
+LL: -14673.186142928416
+Score LL: 0.02941176470587834
+Opt score: 0.0
+Mean len: 13.598039215686274
+(1-eps): 0
+
+Log marginal lik: -inf
+
+          STRATEGY 2/4: among(not(are_branch_leaves_observed) and is_leaf) UNTIL is_positive_observed
+Complexity:2
+
+FORMULA
+
+LL soft: -111283.238352955
+LL greedy: -282723.28142964083
+Score LL soft: 0.02474314479611086
+Score LL greedy: 8.288073187153215e-05
+Mean len (formula): 3.0083
+Opt score (formula): 0.12618735957176902
+
+
+SOFTMAX
+
+LL: -708980.0463805243
+Score LL: 0.00010284865037737952
+Opt score (softmax): 0.3883852250945449
+Mean len (softmax): 7.7212
+
+
+MEAN
+
+LL: -410131.64236673963
+Score LL: 0.01242299672324412
+Opt score: 0.2572862923331569
+Mean len: 5.36475
+
+
+PEOPLE
+
+LL: -26735.852764439078
+Score LL: 0.025310209936532175
+Opt score: 0.19403190319031904
+Mean len: 15.605150214592275
+(1-eps): 0.19403190319031904
+
+Log marginal lik: -26748.20163776111
+
+          STRATEGY 3/4: among(not(is_observed) and is_leaf) UNTIL is_positive_observed
+Complexity:2
+
+FORMULA
+
+LL soft: -81092.32612690786
+LL greedy: -201314.4323520681
+Score LL soft: 0.06727684458406316
+Score LL greedy: 0.0012306566047715446
+Mean len (formula): 3.0046
+Opt score (formula): 0.342390381021515
+
+
+SOFTMAX
+
+LL: -350036.6640018171
+Score LL: 0.0010754117918564587
+Opt score (softmax): 0.5851167695071468
+Mean len (softmax): 5.1212
+
+
+MEAN
+
+LL: -215564.49506436248
+Score LL: 0.03417612818795981
+Opt score: 0.46375357526433086
+Mean len: 4.0629
+
+
+PEOPLE
+
+LL: -31580.398079229697
+Score LL: 0.02823487555933653
+Opt score: 0.3547949847509319
+Mean len: 8.359773371104815
+(1-eps): 0.35479498475093185
+
+Log marginal lik: -31589.03259438773
+
+
+
+AVERAGE OVER ALL CLUSTERS:
+
+ScoreLL: 0.1901724921255524
+OPT: 0.43025996689937196
+PPL_ScoreLL: 0.030309168299721037
+PPL_OPT: 0.1912325480392436
+PPL_LL:-20395.118632023587
+W: 0.1912325480392436
+PPL_LOG_ML: -inf
+
+MODEL LOG MARGINAL LIKELIHOOD: -inf
+WEIGHTED MODEL LOG MARGINAL LIKELIHOOD: -inf
+

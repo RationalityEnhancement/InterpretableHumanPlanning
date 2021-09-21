@@ -1,0 +1,4 @@
+is_previous_observed_sibling AND among(not(has_child_highest_level_value)  and  not(is_observed) )
+          OR          
+not(is_previous_observed_sibling) AND not(observed_count( 1 )) AND not(among(not(is_leaf) ))
+ 

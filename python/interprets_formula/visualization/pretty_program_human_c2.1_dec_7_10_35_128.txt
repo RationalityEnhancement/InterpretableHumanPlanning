@@ -1,0 +1,6 @@
+among(not(is_observed) : has_parent_highest_value ) AND is_previous_observed_parent AND among(has_parent_highest_level_value : has_best_path )
+          OR          
+among(not(is_observed) : has_parent_highest_value ) AND not(is_previous_observed_parent)
+          OR          
+not(among(not(is_observed) : has_parent_highest_value )) AND among(not(is_observed)  and  is_root ) AND observed_count( 2 )
+ 

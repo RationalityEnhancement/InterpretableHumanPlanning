@@ -1,0 +1,212 @@
+          STRATEGY 0/5: among(not(is_observed) and is_root) UNTIL IT APPLIES
+Complexity:1
+
+FORMULA
+
+LL soft: -47681.79389927199
+LL greedy: -17917.594692278988
+Score LL soft: 0.3035998135832399
+Score LL greedy: 0.6389431042462974
+Mean len (formula): 4.0
+Opt score (formula): 1.0
+
+
+SOFTMAX
+
+LL: -17917.594692278988
+Score LL: 0.6389431042462974
+Opt score (softmax): 1.0
+Mean len (softmax): 4.0
+
+
+MEAN
+
+LL: -32799.69429577549
+Score LL: 0.4712714589147686
+Opt score: 1.0
+Mean len: 4.0
+
+
+PEOPLE
+
+LL: -125.4040610666067
+Score LL: 0.09804806835366564
+Opt score: 0.46296296296296297
+Mean len: 5.4
+(1-eps): 0.4629629629629629
+
+Log marginal lik: -129.91086888934947
+
+          STRATEGY 1/5: False UNTIL IT APPLIES
+Complexity:1
+
+FORMULA
+
+LL soft: -5073.780631974804
+LL greedy: 0.0
+Score LL soft: 0.6020721061444604
+Score LL greedy: 1.0
+Mean len (formula): 1.0
+Opt score (formula): 1.0
+
+
+SOFTMAX
+
+LL: 0.0
+Score LL: 1.0
+Opt score (softmax): 1.0
+Mean len (softmax): 1.0
+
+
+MEAN
+
+LL: -2536.890315987402
+Score LL: 0.8010360530722302
+Opt score: 1.0
+Mean len: 1.0
+
+
+PEOPLE
+
+LL: -2448.7333711044066
+Score LL: 0.18474447308493533
+Opt score: 0.5924137931034483
+Mean len: 1.6880093131548313
+(1-eps): 0.5924137931034483
+
+Log marginal lik: -2453.361429131278
+
+          STRATEGY 2/5: False UNTIL IT APPLIES
+Complexity:1
+
+FORMULA
+
+LL soft: -7442.830974777566
+LL greedy: 0.0
+Score LL soft: 0.4750747601807559
+Score LL greedy: 1.0
+Mean len (formula): 1.0
+Opt score (formula): 1.0
+
+
+SOFTMAX
+
+LL: 0.0
+Score LL: 1.0
+Opt score (softmax): 1.0
+Mean len (softmax): 1.0
+
+
+MEAN
+
+LL: -3721.415487388783
+Score LL: 0.737537380090378
+Opt score: 1.0
+Mean len: 1.0
+
+
+PEOPLE
+
+LL: -1635.3853098599882
+Score LL: 0.09862704278939739
+Opt score: 0.32011331444759206
+Mean len: 3.1238938053097347
+(1-eps): 0.32011331444759206
+
+Log marginal lik: -1643.406149471834
+
+          STRATEGY 3/5: among(not(is_observed) and is_root) UNTIL IT APPLIES
+Complexity:1
+
+FORMULA
+
+LL soft: -31350.566431998883
+LL greedy: -84200.10867735534
+Score LL soft: 0.4566837408520173
+Score LL greedy: 0.12184534322288908
+Mean len (formula): 4.0
+Opt score (formula): 0.87705
+
+
+SOFTMAX
+
+LL: -76502.55268976158
+Score LL: 0.09936519370547117
+Opt score (softmax): 0.8072907896952349
+Mean len (softmax): 3.3133
+
+
+MEAN
+
+LL: -53926.55956088023
+Score LL: 0.27802446727874425
+Opt score: 0.8421703948476175
+Mean len: 3.65665
+
+
+PEOPLE
+
+LL: -4317.637743898452
+Score LL: 0.24390103584453926
+Opt score: 0.8075163398692811
+Mean len: 3.5873388042203986
+(1-eps): 0.8075163398692811
+
+Log marginal lik: -4320.999733884154
+
+          STRATEGY 4/5: among(not(has_child_smallest_level_value) : has_parent_highest_value) and among(not(is_observed) and not(is_2max_in_branch)) UNTIL IT APPLIES  AND NEXT not(among(not(has_child_smallest_level_value) : has_parent_highest_value)) and is_previous_observed_parent 
+
+LOOP FROM among(not(has_child_smallest_level_value) : has_parent_highest_value) and among(not(is_observed) and not(is_2max_in_branch))
+Complexity:6
+
+FORMULA
+
+LL soft: -67198.25683836396
+LL greedy: -263385.8039442424
+Score LL soft: 0.274706906057254
+Score LL greedy: 0.006318742184431898
+Mean len (formula): 5.2009
+Opt score (formula): 0.4799754274026345
+
+
+SOFTMAX
+
+LL: -280120.53587734466
+Score LL: 0.014368632588703047
+Opt score (softmax): 0.7034180413137171
+Mean len (softmax): 6.6024
+
+
+MEAN
+
+LL: -173659.3963578543
+Score LL: 0.14453776932297852
+Opt score: 0.5916967343581758
+Mean len: 5.90165
+
+
+PEOPLE
+
+LL: -1578.4172547752908
+Score LL: 0.152390676929424
+Opt score: 0.6233611442193087
+Mean len: 6.877049180327869
+(1-eps): 0.6233611442193088
+
+Log marginal lik: -1582.4809915664946
+
+
+
+AVERAGE OVER ALL CLUSTERS:
+
+ScoreLL: 0.4864814257358199
+OPT: 0.8867734258411588
+PPL_ScoreLL: 0.15554225940039232
+PPL_OPT: 0.5612735109205186
+PPL_LL:-2021.115548140949
+W: 0.5612735109205186
+PPL_LOG_ML: -2026.031834588622
+
+MODEL LOG MARGINAL LIKELIHOOD: -10130.15917294311
+WEIGHTED MODEL LOG MARGINAL LIKELIHOOD: -2510.819191698348
+

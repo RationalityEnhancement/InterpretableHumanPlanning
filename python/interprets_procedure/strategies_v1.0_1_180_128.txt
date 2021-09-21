@@ -1,0 +1,68 @@
+
+
+------------------------------
+
+STRATEGY 0/1: True UNTIL IT STOPS APPLYING
+
+Complexity: 1
+
+Translation: 1. Terminate or click on some random nodes and then terminate. 
+   
+   Repeat this step as long as possible.
+
+
+
+
+
+FORMULA
+
+LL soft: -206725.80712075377
+LL greedy: -804001.0261155618
+Score LL soft: 0.05187427230638874
+Score LL greedy: 1.0050152035995618e-05
+Mean len (formula): 6.9865
+Opt score (formula): 0.12231436051625472
+
+
+SOFTMAX
+
+LL: -25649.49357461227
+Score LL: 0.07692307692310077
+Opt score (softmax): 1.0
+Mean len (softmax): 1.0
+
+
+MEAN
+
+LL: -116187.65034768303
+Score LL: 0.06439867461474476
+Opt score: 0.5611571802581273
+Mean len: 3.99325
+
+
+PEOPLE
+
+LL: -55711.79715991013
+Score LL: 0.10711705336181132
+Opt score: 1.0
+Mean len: 4.9415494353081035
+Epsilon: 0.0
+Opt action score: 1.0
+
+
+
+AVERAGE OVER ALL CLUSTERS:
+
+ScoreLL: 0.06439867461474476
+OPT: 0.5611571802581273
+PPL_ScoreLL: 0.10711705336181132
+PPL_OPT: 1.0
+PPL_LL: -55711.79715991013
+PPL_ACT: 1.0
+W: 1.0
+
+
+MODEL LOG MARGINAL LIKELIHOOD: -55801.325927428654
+AIC: 111465.59431984417
+BIC: 111602.65185485731
+

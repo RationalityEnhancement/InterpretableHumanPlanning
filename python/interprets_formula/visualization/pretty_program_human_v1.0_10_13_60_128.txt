@@ -1,0 +1,4 @@
+among(is_root  and  not(is_observed) )
+          OR          
+not(among(is_root  and  not(is_observed) )) AND among(not(is_observed) : has_parent_highest_value )
+ 

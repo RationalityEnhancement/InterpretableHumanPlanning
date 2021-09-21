@@ -1,0 +1,216 @@
+          STRATEGY 0/5: among(is_root and not(is_observed)) UNTIL are_roots_observed AND NEXT not(among(is_root and not(is_observed))) and among(not(is_observed) : has_parent_highest_value) and are_roots_observed and among(not(has_child_smallest_level_value) : has_best_path) UNTIL IT APPLIES
+Complexity:6
+
+FORMULA
+
+LL soft: -54468.62109766319
+LL greedy: -104755.94451337105
+Score LL soft: 0.4524446255087064
+Score LL greedy: 0.21755620540610493
+Mean len (formula): 6.8679
+Opt score (formula): 0.8092646370623945
+
+
+SOFTMAX
+
+LL: -150931.6368830039
+Score LL: 0.14324234298562594
+Opt score (softmax): 0.8856973645247261
+Mean len (softmax): 7.7671
+
+
+MEAN
+
+LL: -102700.12899033354
+Score LL: 0.29784348424716617
+Opt score: 0.8474810007935603
+Mean len: 7.3175
+
+
+PEOPLE
+
+LL: -6005.497852248665
+Score LL: 0.21711258611341763
+Opt score: 0.7492370295015259
+Mean len: 6.898245614035088
+(1-eps): 0.7492370295015259
+
+Log marginal lik: -6009.339883412214
+
+          STRATEGY 1/5: among(depth( 2) and not(is_observed)) UNTIL (is_positive_observed or is_previous_observed_max_level( 3))
+Complexity:3
+
+FORMULA
+
+LL soft: -37915.80998505363
+LL greedy: -83423.14124402095
+Score LL soft: 0.2530143776594892
+Score LL greedy: 0.04861696610932416
+Mean len (formula): 2.7589
+Opt score (formula): 0.6561999117284953
+
+
+SOFTMAX
+
+LL: -108617.68560537731
+Score LL: 0.042006496386082504
+Opt score (softmax): 0.8010798190573472
+Mean len (softmax): 3.4265
+
+
+MEAN
+
+LL: -73266.74779521547
+Score LL: 0.14751043702278585
+Opt score: 0.7286398653929212
+Mean len: 3.0927
+
+
+PEOPLE
+
+LL: -3327.502610959941
+Score LL: 0.09111705949301863
+Opt score: 0.34269258459323254
+Mean len: 6.173333333333333
+(1-eps): 0.3426925845932326
+
+Log marginal lik: -3335.4308489816303
+
+          STRATEGY 2/5: None
+Complexity:1
+
+FORMULA
+
+LL soft: -24221.735299373322
+LL greedy: -138155.10557964438
+Score LL soft: 0.08872855355285925
+Score LL greedy: 9.999999999998352e-07
+Mean len (formula): 1.0
+Opt score (formula): 0.0
+
+
+SOFTMAX
+
+LL: -551929.6467906794
+Score LL: 9.999999999998335e-07
+Opt score (softmax): 0.0
+Mean len (softmax): 3.995
+
+
+MEAN
+
+LL: -288075.69104502635
+Score LL: 0.044364776776429624
+Opt score: 0.0
+Mean len: 2.4975
+
+
+PEOPLE
+
+LL: -4773.3707542359825
+Score LL: 0.07692307692307433
+Opt score: 0.0
+Mean len: 5.212885154061625
+(1-eps): 0
+
+Log marginal lik: -inf
+
+          STRATEGY 3/5: False UNTIL IT APPLIES
+Complexity:1
+
+FORMULA
+
+LL soft: -1354.8317894787833
+LL greedy: 0.0
+Score LL soft: 0.8732938525263425
+Score LL greedy: 1.0
+Mean len (formula): 1.0
+Opt score (formula): 1.0
+
+
+SOFTMAX
+
+LL: 0.0
+Score LL: 1.0
+Opt score (softmax): 1.0
+Mean len (softmax): 1.0
+
+
+MEAN
+
+LL: -677.4158947393917
+Score LL: 0.9366469262631713
+Opt score: 1.0
+Mean len: 1.0
+
+
+PEOPLE
+
+LL: -4979.134504459225
+Score LL: 0.1898781222742395
+Opt score: 0.6019352686019352
+Mean len: 1.6613082039911309
+(1-eps): 0.6019352686019352
+
+Log marginal lik: -4984.033006049101
+
+          STRATEGY 4/5: among(not(is_observed) : has_parent_highest_value) and among(not(has_leaf_smallest_level_value) and not(has_leaf_highest_level_value) : has_best_path) and all_(has_root_highest_level_value and has_parent_smallest_level_value : has_leaf_smallest_value) UNTIL IT APPLIES  AND NEXT not(among(not(is_observed) : has_parent_highest_value)) and among(has_root_highest_level_value and not(is_observed) : has_smallest_depth) UNTIL IT APPLIES AND NEXT among(not(is_observed) : has_parent_highest_value) and among(not(has_leaf_smallest_level_value) and not(has_leaf_highest_level_value) : has_best_path) and all_(has_root_highest_level_value and has_parent_smallest_level_value : has_leaf_smallest_value) UNTIL IT APPLIES AND NEXT among(not(is_observed) : has_parent_highest_value) and not(among(not(has_leaf_smallest_level_value) and not(has_leaf_highest_level_value) : has_best_path)) and not(among(not(is_max_in_branch)))
+
+OR
+
+among(not(is_observed) : has_parent_highest_value) and among(not(has_leaf_smallest_level_value) and not(has_leaf_highest_level_value) : has_best_path) and all_(has_root_highest_level_value and has_parent_smallest_level_value : has_leaf_smallest_value) UNTIL IT APPLIES  AND NEXT not(among(not(is_observed) : has_parent_highest_value)) and among(has_root_highest_level_value and not(is_observed) : has_smallest_depth) UNTIL is_previous_observed_min_level( 1) 
+
+LOOP FROM among(not(is_observed) : has_parent_highest_value) and among(not(has_leaf_smallest_level_value) and not(has_leaf_highest_level_value) : has_best_path) and all_(has_root_highest_level_value and has_parent_smallest_level_value : has_leaf_smallest_value)
+Complexity:20
+
+FORMULA
+
+LL soft: -54331.36970093689
+LL greedy: -104139.48123388679
+Score LL soft: 0.40037127279222595
+Score LL greedy: 0.17299041322582406
+Mean len (formula): 5.9355
+Opt score (formula): 0.8005824158886405
+
+
+SOFTMAX
+
+LL: -140820.35258620977
+Score LL: 0.10802545336100992
+Opt score (softmax): 0.8649789029535865
+Mean len (softmax): 6.3279
+
+
+MEAN
+
+LL: -97575.86114357333
+Score LL: 0.2541983630766179
+Opt score: 0.8327806594211136
+Mean len: 6.1317
+
+
+PEOPLE
+
+LL: -6825.699630558092
+Score LL: 0.14042239836046033
+Opt score: 0.6097210238711533
+Mean len: 4.737057220708447
+(1-eps): 0.6097210238711532
+
+Log marginal lik: -6830.598642622923
+
+
+
+AVERAGE OVER ALL CLUSTERS:
+
+ScoreLL: 0.33611279747723416
+OPT: 0.681780305121519
+PPL_ScoreLL: 0.1430906486328421
+PPL_OPT: 0.4607171813135694
+PPL_LL:-5182.2410704923805
+W: 0.4607171813135694
+PPL_LOG_ML: -inf
+
+MODEL LOG MARGINAL LIKELIHOOD: -inf
+WEIGHTED MODEL LOG MARGINAL LIKELIHOOD: -inf
+

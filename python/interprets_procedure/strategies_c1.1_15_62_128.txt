@@ -1,0 +1,156 @@
+          STRATEGY 1/15: False UNTIL IT APPLIES
+Complexity:1
+
+FORMULA
+
+LL soft: -65.81082969304951
+LL greedy: 0.0
+Score LL soft: 0.9934405249301087
+Score LL greedy: 1.0
+Mean len (formula): 1.0
+Opt score (formula): 1.0
+
+
+SOFTMAX
+
+LL: 0.0
+Score LL: 1.0
+Opt score (softmax): 1.0
+Mean len (softmax): 1.0
+
+
+MEAN
+
+LL: -32.90541484652476
+Score LL: 0.9967202624650544
+Opt score: 1.0
+Mean len: 1.0
+
+
+PEOPLE
+
+LL: -10.911753282199022
+Score LL: 0.9935297950912231
+Opt score: 0.9994051160023796
+Mean len: 1.000595238095238
+(1-eps): 0.9994051160023796
+
+Log marginal lik: -15.650585599646123
+
+          STRATEGY 1/15: False UNTIL IT APPLIES
+Complexity:1
+
+FORMULA
+
+LL soft: -65.81082969304951
+LL greedy: 0.0
+Score LL soft: 0.9934405249301087
+Score LL greedy: 1.0
+Mean len (formula): 1.0
+Opt score (formula): 1.0
+
+
+SOFTMAX
+
+LL: 0.0
+Score LL: 1.0
+Opt score (softmax): 1.0
+Mean len (softmax): 1.0
+
+
+MEAN
+
+LL: -32.90541484652476
+Score LL: 0.9967202624650544
+Opt score: 1.0
+Mean len: 1.0
+
+
+PEOPLE
+
+LL: -10.911753282199022
+Score LL: 0.9935297950912231
+Opt score: 0.9994051160023796
+Mean len: 1.000595238095238
+(1-eps): 0.9994051160023796
+
+Log marginal lik: -15.650585599646123
+
+          STRATEGY 1/15: False UNTIL IT APPLIES
+Complexity:1
+
+FORMULA
+
+LL soft: -65.81082969304951
+LL greedy: 0.0
+Score LL soft: 0.9934405249301087
+Score LL greedy: 1.0
+Mean len (formula): 1.0
+Opt score (formula): 1.0
+
+
+SOFTMAX
+
+LL: 0.0
+Score LL: 1.0
+Opt score (softmax): 1.0
+Mean len (softmax): 1.0
+
+
+MEAN
+
+LL: -32.90541484652476
+Score LL: 0.9967202624650544
+Opt score: 1.0
+Mean len: 1.0
+
+
+PEOPLE
+
+LL: -10.911753282199022
+Score LL: 0.9935297950912231
+Opt score: 0.9994051160023796
+Mean len: 1.000595238095238
+(1-eps): 0.9994051160023796
+
+Log marginal lik: -15.650585599646123
+
+          STRATEGY 2/15: None
+Complexity:1
+
+FORMULA
+
+LL soft: -26792.15839793928
+LL greedy: -138155.10557964438
+Score LL soft: 0.06861693973686914
+Score LL greedy: 9.999999999998352e-07
+Mean len (formula): 1.0
+Opt score (formula): 0.0
+
+
+SOFTMAX
+
+LL: -919325.5190586279
+Score LL: 9.999999999998318e-07
+Opt score (softmax): 0.0
+Mean len (softmax): 6.6543
+
+
+MEAN
+
+LL: -473058.8387282836
+Score LL: 0.03430896986843457
+Opt score: 0.0
+Mean len: 3.82715
+
+
+PEOPLE
+
+LL: -1403.02729853145
+Score LL: 0.07692307692307843
+Opt score: 0.0
+Mean len: 7.012820512820513
+(1-eps): 0
+
+Log marginal lik: -inf
+

@@ -1,0 +1,132 @@
+          STRATEGY 0/3: False UNTIL IT APPLIES
+Complexity:1
+
+FORMULA
+
+LL soft: -9433.777102650629
+LL greedy: 0.0
+Score LL soft: 0.3893106335246105
+Score LL greedy: 1.0
+Mean len (formula): 1.0
+Opt score (formula): 1.0
+
+
+SOFTMAX
+
+LL: 0.0
+Score LL: 1.0
+Opt score (softmax): 1.0
+Mean len (softmax): 1.0
+
+
+MEAN
+
+LL: -4716.888551325314
+Score LL: 0.6946553167623053
+Opt score: 1.0
+Mean len: 1.0
+
+
+PEOPLE
+
+LL: -10723.931111041158
+Score LL: 0.036149125875339375
+Opt score: 0.1891640866873065
+Mean len: 5.286415711947627
+(1-eps): 0.18916408668730655
+
+Log marginal lik: -10736.038604248472
+
+          STRATEGY 1/3: among(not(is_observed) and is_leaf) UNTIL is_positive_observed
+Complexity:2
+
+FORMULA
+
+LL soft: -84494.85031599348
+LL greedy: -218030.0563388962
+Score LL soft: 0.05992757086924561
+Score LL greedy: 0.0007011233943877454
+Mean len (formula): 3.002
+Opt score (formula): 0.3214265532044246
+
+
+SOFTMAX
+
+LL: -341079.28803507634
+Score LL: 0.0012100807575503479
+Opt score (softmax): 0.5953759502146599
+Mean len (softmax): 5.0778
+
+
+MEAN
+
+LL: -212787.0691755349
+Score LL: 0.030568825813397982
+Opt score: 0.45840125170954227
+Mean len: 4.039899999999999
+
+
+PEOPLE
+
+LL: -43644.08198308329
+Score LL: 0.027239753447894925
+Opt score: 0.32469247915462723
+Mean len: 9.274885145482388
+(1-eps): 0.3246924791546273
+
+Log marginal lik: -43653.42665902161
+
+          STRATEGY 2/3: not(is_previous_observed_sibling) and not(observed_count( 1)) and not(among(not(is_leaf))) AND NEXT is_previous_observed_sibling and among(not(has_child_highest_level_value) and not(is_observed)) UNTIL IT APPLIES
+Complexity:5
+
+FORMULA
+
+LL soft: -71049.79798490218
+LL greedy: -92796.539415025
+Score LL soft: 0.1692725824296612
+Score LL greedy: 0.09828208807449476
+Mean len (formula): 4.0
+Opt score (formula): 0.4893521543252226
+
+
+SOFTMAX
+
+LL: -200659.35272145475
+Score LL: 0.06559603049578656
+Opt score (softmax): 0.8446174081657559
+Mean len (softmax): 7.3657
+
+
+MEAN
+
+LL: -135854.57535317846
+Score LL: 0.11743430646272388
+Opt score: 0.6669847812454892
+Mean len: 5.68285
+
+
+PEOPLE
+
+LL: -17837.461603131393
+Score LL: 0.09494385248440808
+Opt score: 0.6187961985216474
+Mean len: 15.685300207039338
+(1-eps): 0.6187961985216472
+
+Log marginal lik: -17842.665444692375
+
+
+
+AVERAGE OVER ALL CLUSTERS:
+
+ScoreLL: 0.2808861496794757
+OPT: 0.7084620109850105
+PPL_ScoreLL: 0.05277757726921412
+PPL_OPT: 0.377550921454527
+PPL_LL:-24068.49156575195
+W: 0.377550921454527
+PPL_LOG_ML: -24077.376902654152
+
+MODEL LOG MARGINAL LIKELIHOOD: -72232.13070796245
+WEIGHTED MODEL LOG MARGINAL LIKELIHOOD: -26303.650287072607
+

@@ -1,0 +1,12 @@
+among(not(has_root_smallest_level_value)  and  not(is_observed) : has_parent_highest_value ) AND among(not(are_branch_leaves_observed) : has_best_path ) AND among(not(depth( 2 ))  and  not(has_leaf_highest_level_value) : has_parent_highest_value )
+          OR          
+among(not(has_root_smallest_level_value)  and  not(is_observed) : has_parent_highest_value ) AND among(not(are_branch_leaves_observed) : has_best_path ) AND not(among(not(depth( 2 ))  and  not(has_leaf_highest_level_value) : has_parent_highest_value )) AND all_(is_root  and  not(is_observed) : has_root_smallest_value )
+          OR          
+among(not(has_root_smallest_level_value)  and  not(is_observed) : has_parent_highest_value ) AND among(not(are_branch_leaves_observed) : has_best_path ) AND not(among(not(depth( 2 ))  and  not(has_leaf_highest_level_value) : has_parent_highest_value )) AND not(all_(is_root  and  not(is_observed) : has_root_smallest_value ))
+          OR          
+among(not(has_root_smallest_level_value)  and  not(is_observed) : has_parent_highest_value ) AND not(among(not(are_branch_leaves_observed) : has_best_path )) AND not(among(depth( 2 )  and  not(is_2max_in_branch) )) AND all_(is_2max_in_branch  and  is_leaf : has_child_highest_value )
+          OR          
+not(among(not(has_root_smallest_level_value)  and  not(is_observed) : has_parent_highest_value )) AND among(not(depth( 2 ))  and  not(is_observed) : has_parent_highest_value ) AND among(not(has_leaf_highest_level_value)  and  not(has_child_smallest_level_value) : has_parent_smallest_value ) AND among(not(is_observed)  and  is_leaf : has_best_path )
+          OR          
+not(among(not(has_root_smallest_level_value)  and  not(is_observed) : has_parent_highest_value )) AND among(not(depth( 2 ))  and  not(is_observed) : has_parent_highest_value ) AND not(among(not(has_leaf_highest_level_value)  and  not(has_child_smallest_level_value) : has_parent_smallest_value )) AND among(not(depth( 2 ))  and  not(has_root_smallest_level_value) : has_parent_highest_value )
+ 

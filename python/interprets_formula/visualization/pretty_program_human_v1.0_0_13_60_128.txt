@@ -1,0 +1,4 @@
+among(not(is_observed)  and  is_leaf ) AND all_(is_leaf  and  not(are_branch_leaves_observed) : has_best_path )
+          OR          
+among(not(is_observed)  and  is_leaf ) AND not(all_(is_leaf  and  not(are_branch_leaves_observed) : has_best_path )) AND is_previous_observed_sibling
+ 

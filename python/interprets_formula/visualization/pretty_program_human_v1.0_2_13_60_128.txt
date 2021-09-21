@@ -1,0 +1,4 @@
+among(is_leaf  and  not(is_observed) : has_parent_highest_value )
+          OR          
+not(among(is_leaf  and  not(is_observed) : has_parent_highest_value )) AND among(depth( 2 )  and  not(is_observed) ) AND all_(is_leaf  and  not(is_observed) : has_best_path )
+ 

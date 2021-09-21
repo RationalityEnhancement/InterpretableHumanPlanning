@@ -1,0 +1,4 @@
+among(not(is_observed) : has_parent_smallest_value ) AND not(is_previous_observed_sibling)
+          OR          
+not(among(not(is_observed) : has_parent_smallest_value )) AND is_previous_observed_parent
+ 
