@@ -1,6 +1,6 @@
 # Human-Interpret
 
-This is a Python library associated with the "Automatic discovery and description of human planning strategies" (Skirzynski, Jain, & Lieder, 2021) manuscript submitted to the Behavior Research Methods. It is is avaiable at .... Human-Interpret is an algorithm presented in this paper which transforms data from a process-tracing experiment into a set of descriptions for planning strategies used in this experiment.
+This is a Python library associated with the "Automatic discovery and description of human planning strategies" (Skirzynski, Jain, & Lieder, 2021) manuscript submitted to the Behavior Research Methods. It is is avaiable at https://arxiv.org/abs/2109.14493. Human-Interpret is an algorithm presented in this paper which transforms data from a process-tracing experiment into a set of descriptions for planning strategies used in this experiment.
 
 We used Python 3.6.9 and Ubuntu 20.04.
 

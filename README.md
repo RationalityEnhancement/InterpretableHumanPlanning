@@ -1,6 +1,6 @@
-# Intrpretable human planning
+# Interpretable human planning
 
-This is a repository associated with a project on automatically discovering and describing planning strategies used by people. Our computational method for enabling this process is described in a manuscript submitted to Behavior Research Methods journal (Skirzynski, Jain, & Lieder, 2021) and available here .... 
+This is a repository associated with a project on automatically discovering and describing planning strategies used by people. Our computational method for enabling this process is described in a manuscript submitted to Behavior Research Methods journal (Skirzynski, Jain, & Lieder, 2021) and available at https://arxiv.org/abs/2109.14493. 
 
 ## Human-Interpret
 
