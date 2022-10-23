@@ -349,7 +349,7 @@ def interpret_human_data(pipeline, weights, features, normalized_features,
         str : dict
             See create_or_expand in RL2DT.interpret
     """
-    add = '_' + info if info != '' else ''
+    add = info
     info = exp_name + '_' + str(strategy_num) + '_' + str(all_strategies) + '_' + \
            str(num_participants) + '_' + str(num_demos) + add
        
@@ -409,7 +409,7 @@ def interpret_human_data(pipeline, weights, features, normalized_features,
     return forml_statistics
 
 def load_EM_data(exp_num, num_strategies, num_participants, strategy_num,
-                 num_simulations):
+                 num_simulations, info):
     """
     Load data pertinent to the softmax policies of the clusters found with the 
     EM algorithm.
@@ -445,7 +445,7 @@ def load_EM_data(exp_num, num_strategies, num_participants, strategy_num,
             [0,1]
     """
     clustered_weights_path = f"clustering/em_clustering_results/{exp_num}"
-    file_name = f"{num_strategies}_{num_participants}_params"
+    file_name = f"{num_strategies}_{num_participants}_params" + info
     weights, _, _ =  pickle_load(f"{clustered_weights_path}/{file_name}.pkl")
     
     exp_pipelines = pickle_load("data/exp_pipelines.pkl")

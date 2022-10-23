@@ -226,7 +226,7 @@ def compute_clusters(exp_id, num_participants, num_clusters, block):
            SMM.get_params(), num_p
 
 def save_clusters_data(exp_id, num_cl, num_p, labels, log_lik, 
-                       participant_data, smm_params):
+                       participant_data, smm_params, info):
     """
     Save parameters of the computed EM clusters.
     
@@ -241,6 +241,7 @@ def save_clusters_data(exp_id, num_cl, num_p, labels, log_lik,
     participant_data : tuple
     smm_params : tuple
     """
+
     p_envs, p_clicks, p_points = participant_data
     label_points = defaultdict(list)
     for E, C, p, l in zip(p_envs, p_clicks, p_points, labels):
@@ -250,10 +251,10 @@ def save_clusters_data(exp_id, num_cl, num_p, labels, log_lik,
     create_dir(d)
 
     # Saving cluster weights and posterior probabilities
-    pickle_save(smm_params, f"{d}/{num_cl}_{num_p}_params.pkl")
+    pickle_save(smm_params, f"{d}/{num_cl}_{num_p}_params" + info + ".pkl")
 
     # Saving cluster assignments, Evidence lower bound and the posterior probabilities
-    pickle_save((label_points, log_lik), f"{d}/{num_cl}_{num_p}.pkl")
+    pickle_save((label_points, log_lik), f"{d}/{num_cl}_{num_p}" + info + ".pkl")
 
 
 if __name__ == "__main__":

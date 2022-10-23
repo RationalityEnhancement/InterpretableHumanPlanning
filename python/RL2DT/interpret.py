@@ -482,11 +482,11 @@ def interpret_binary(num_demos, aspiration_level, patience, max_depth,
                         num=num,
                         info=info)
 
-        return best_formula, best_stats
+        return best_formula, best_stats, {}
 
     else:
         print("The set of predicates is incufficient...")
-        return None, None
+        return None, None, {}
     
 def init_sampling_machine(clustering, num_demos, demos, use_DSL_data, dsl_path,
                           num_clusters, info, **kwargs):
@@ -542,7 +542,7 @@ def init_sampling_machine(clustering, num_demos, demos, use_DSL_data, dsl_path,
                                            all_data=demos)
         sampling_machine.cluster(method="hierarchical", 
                                  num_clusters=num_clusters,
-                                 vis=True,
+                                 vis=False,
                                  info=info)
     return sampling_machine
 
@@ -756,68 +756,82 @@ def interpret_adaptive(num_demos, max_divergence, max_depth, tolerance,
                                              use_DSL_data, dsl_path, num_clusters, 
                                              info, **kwargs)
     n_clusters = sampling_machine.get_nclust()
+    start_n_clust = n_clusters
+    
+    gd = kwargs['global_data']
 
     start = True
     while n_clusters > 0:
-
-        print(BLANK*2 + "Sampling demos from {} clusters\n".format(n_clusters))
         
-        sampling_machine.reset_pipeline()
-        pos_demos, neg_demos, val_demos = sample_sampling_machine(sampling_machine, 
-                                                                  validation_demos,
-                                                                  num_samples,
-                                                                  n_clusters)
-        sampled_demos = {'pos': pos_demos, 'neg': neg_demos}
-        
-        if start:
-            n_clusters = sampling_machine.get_nclust()
-        start = False
-        
-        prev_formula_divergence = np.inf
-        prev_formula_nodes = np.inf
-        
-        for dep in range(1, max_depth+1):
-            print(BLANK + "Checking formulas with max depth {}\n".format(dep))
+        if hash((n_clusters, start_n_clust)) in gd.keys():
+            print(BLANK*2 + "Demos already analyzed\n".format(n_clusters))
+            no_formula, best_formula, best_stats = gd[hash((n_clusters, start_n_clust))]
             
-            formula = wrapper_train(dep, sampled_demos, val_demos, 
-                                    data=[sampling_machine.get_X(), 
-                                          sampling_machine.get_y()])
-            formula_divergence = np.inf
-            formula_nodes = get_formula_nodes(formula)
+        else:
 
-            if formula is not None:
-                value_expert, value_formula = formula_value_speedup(formula, 
-                                                                    expert_reward, 
-                                                                    max_divergence, 
-                                                                    tolerance,
-                                                                    num_rollouts, 
-                                                                    normalizer,
-                                                                    kwargs['stats'],
-                                                                    num)
-                formula_divergence =  abs(value_expert-value_formula) / abs(normalizer)
+            print(BLANK*2 + "Sampling demos from {} clusters\n".format(n_clusters))
+        
+            sampling_machine.reset_pipeline()
+            pos_demos, neg_demos, val_demos = sample_sampling_machine(sampling_machine, 
+                                                                      validation_demos,
+                                                                      num_samples,
+                                                                      n_clusters)
+            sampled_demos = {'pos': pos_demos, 'neg': neg_demos}
+        
+            if start:
+                n_clusters = sampling_machine.get_nclust()
+            start = False
+        
+            prev_formula_divergence = np.inf
+            prev_formula_nodes = np.inf
+        
+            for dep in range(1, max_depth+1):
+                print(BLANK + "Checking formulas with max depth {}\n".format(dep))
             
-            if is_best_formula(formula_divergence, formula_nodes,
-                               prev_formula_divergence, prev_formula_nodes,
-                               max_divergence, tolerance):                   
-                no_formula = False
-                best_formula = formula
-                best_points = len(pos_demos) + len(val_demos['pos'])
-                best_depth = get_formula_depth(formula.program)
-                best_nodes = get_formula_nodes(formula)
-                best_clusters = n_clusters
-                best_value = value_formula
-                best_stats = (best_points, init_points, best_clusters, best_depth, 
-                              best_nodes, best_value, expert_reward)
+                formula = wrapper_train(dep, sampled_demos, val_demos, 
+                                        data=[sampling_machine.get_X(), 
+                                              sampling_machine.get_y()])
+                formula_divergence = np.inf
+                formula_nodes = get_formula_nodes(formula)
+
+                if formula is not None:
+                    value_expert, value_formula = formula_value_speedup(formula, 
+                                                                        expert_reward, 
+                                                                        max_divergence, 
+                                                                        tolerance,
+                                                                        num_rollouts, 
+                                                                        normalizer,
+                                                                        kwargs['stats'],
+                                                                        num)
+                    formula_divergence =  abs(value_expert-value_formula) / abs(normalizer)
+            
+                if is_best_formula(formula_divergence, formula_nodes,
+                                   prev_formula_divergence, prev_formula_nodes,
+                                   max_divergence, tolerance):                   
+                    no_formula = False
+                    best_formula = formula
+                    best_points = len(pos_demos) + len(val_demos['pos'])
+                    best_depth = get_formula_depth(formula.program)
+                    best_nodes = get_formula_nodes(formula)
+                    best_clusters = n_clusters
+                    best_value = value_formula
+                    best_stats = (best_points, init_points, best_clusters, best_depth, 
+                                  best_nodes, best_value, expert_reward)
                 
-                prev_formula_divergence = formula_divergence
-                prev_formula_nodes = formula_nodes
+                    prev_formula_divergence = formula_divergence
+                    prev_formula_nodes = formula_nodes
          
         if no_formula is False:
+            gd[hash((n_clusters, start_n_clust))] = (no_formula, best_formula, best_stats)
             break
         else:
+            gd[hash((n_clusters, start_n_clust))] = (no_formula, None, None)
             n_clusters -= 1
 
     if no_formula is False:
+        best_clusters = n_clusters
+        best_stats = (best_points, init_points, best_clusters, best_depth, 
+                      best_nodes, best_value, expert_reward)
         all_points = len(demos['pos'])
         print("Best interpretable formula found for {} clusters".format(best_clusters) + \
               " with {}/{} demos. It has {} nodes, depth {}, return {}".format(best_points,
@@ -841,11 +855,11 @@ def interpret_adaptive(num_demos, max_divergence, max_depth, tolerance,
                           env=env_name, 
                           num=num, 
                           info=info)
-        return best_formula, best_stats
+        return best_formula, best_stats, gd
      
     else:
         print("The set of predicates is insufficient...")
-        return None, None
+        return None, None, gd
 
 def get_formula_depth(formula):
     '''
@@ -973,11 +987,17 @@ def wrapper_interpret(algorithm, **kwargs):
     for i in range(ITERS):
         print("\n\n" + BLANK*2 + "ITERATION {}\n\n".format(i))
         data_by_clusters = {}
+        
+        global_cluster_data = {} # formulas for a given of number of clusters in the data
+                                 # reading data off this dictionary speeds up the alg
+                                 
         for n_cl in candidate_numbers:
             print("\n\n\n\n" + BLANK*2 + "       " + \
                   "CHECKING {} AS THE NUMBER OF CLUSTERS\n\n\n\n".format(n_cl))
-            output, output_st = interpret[algorithm](**kwargs, num_clusters=n_cl, 
-                                                     dsl_path=dsl_path, num=i)
+            output, output_st, gd = interpret[algorithm](**kwargs, num_clusters=n_cl, 
+                                                         dsl_path=dsl_path, num=i,
+                                                         global_data=global_cluster_data)
+            global_cluster_data = gd
             formula = output.program if output else None
             stats = output_st if output_st else [None]*7
             data_by_clusters[n_cl] = {'formula': formula, 'points': stats[0],

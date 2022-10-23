@@ -511,7 +511,7 @@ def return_allowed_acts(strategy_str, state, unobserved_nodes):
         return [0]
     return allowed
 
-def load_participant_data(exp_id, num_clust, num_part, clust_id):
+def load_participant_data(exp_id, num_clust, num_part, clust_id, info, freqs=False):
     """
     Extract human data belonging to a particular cluster found with the EM 
     algorithm.
@@ -527,6 +527,8 @@ def load_participant_data(exp_id, num_clust, num_part, clust_id):
         Number of participants of exp_id whose data was considered
     clust_id : int
         Identifier of the EM cluster (softmax policy)
+    freqs (optional) : bool
+        Whether to return strategy frequencies
         
     Returns
     -------
@@ -538,12 +540,20 @@ def load_participant_data(exp_id, num_clust, num_part, clust_id):
         in each consecutive environment
     """
     with open('./clustering/em_clustering_results/' + exp_id + '/' + \
-              str(num_clust) + '_' + str(num_part) + '.pkl', 'rb') as handle:
+              str(num_clust) + '_' + str(num_part) + info + '.pkl', 'rb') as handle:
         dict_object = pickle.load(handle)
     dct = dict_object[0]
     envs = [data[0] for data in dct[clust_id]]
     action_seqs = [data[1] for data in dct[clust_id]]
-    return envs, action_seqs
+    part_trial = [data[-1] for data in dct[clust_id]]
+    
+    lens = {k : len(v) for k,v, in dct.items()}
+    total_len = sum(lens.values())
+    freq = {l: round(float(v)/total_len, 4) for l, v in lens.items()}
+    
+    if freqs:
+        return envs, action_seqs, part_trial, freq[clust_id]
+    return envs, action_seqs, part_trial
 
 from functools import lru_cache
 @lru_cache()
@@ -592,6 +602,10 @@ def compute_score_people(envs, pipeline, people_acts, formula, verbose):
         Average likelihood per planning operation over average optimal likelihood
         per planning operation when optimal is computed as though all (state, action)
         pairs agreed with the formula 
+    mean_lik : float
+        Mean of the likelihoods for human planning operations under the formula
+    geo_mean_lik : float
+        Geomatric mean of the likelihoods for human planning operations under the formula
     """
     envs = [list(e) for e in envs]
     pipeline = [(list(pipeline[0]), pipeline[1])]
@@ -600,7 +614,7 @@ def compute_score_people(envs, pipeline, people_acts, formula, verbose):
     optimal_acts = 0
     total_len = 0
     log_likelihood = 0
-    total_likelihood, optimal_likelihood = 0, 0
+    corr_likelihood, incorr_likelihood, optimal_likelihood = 0, 0, 0
     ll_allowed, ll_not_allowed = 0, 0
     epsilon_power, _1_epsilon_power = 0, 0
     if verbose: bar = ChargingBar('Computing people data', max=len(envs))
@@ -663,10 +677,11 @@ def compute_score_people(envs, pipeline, people_acts, formula, verbose):
             if action in allowed_acts:
                 optimal_acts += 1
                 ll_allowed += np.log(allowed_distr[action])
-                total_likelihood += allowed_distr[action]
+                corr_likelihood += allowed_distr[action]
                 _1_epsilon_power += 1
             else:
                 ll_not_allowed += np.log(not_allowed_distr[action])
+                incorr_likelihood += not_allowed_distr[action]
                 epsilon_power += 1
             
             optimal_likelihood += allowed_distr[allowed_acts[0]]
@@ -675,9 +690,6 @@ def compute_score_people(envs, pipeline, people_acts, formula, verbose):
         if verbose: bar.next()
     if verbose: bar.finish()
     
-    lik_per_action = total_likelihood / total_len
-    opt_lik_per_action = optimal_likelihood / total_len
-    opt_act_score = lik_per_action / opt_lik_per_action
     opt_score = optimal_acts / total_len
     mean_len = total_len / len(envs)
     if verbose: print("Epsilon optimization...")
@@ -694,8 +706,101 @@ def compute_score_people(envs, pipeline, people_acts, formula, verbose):
     else:
         log_likelihood = epsilon_power*np.log(epsilon) + ll_not_allowed + \
                          _1_epsilon_power*np.log((1-epsilon)) + ll_allowed
+    
+    total_likelihood = (1-epsilon)*corr_likelihood + epsilon*incorr_likelihood                   
+    mean_lik = total_likelihood / total_len
+    mean_opt_lik = optimal_likelihood / total_len
+    opt_act_score = mean_lik / mean_opt_lik
+    geo_mean_lik = np.exp(log_likelihood / total_len)
                          
-    return log_likelihood, opt_score, mean_len, epsilon, opt_act_score
+    return log_likelihood, opt_score, mean_len, epsilon, opt_act_score, mean_lik, geo_mean_lik
+
+
+def compute_likelihood_random(envs, pipeline, people_acts):
+    envs = [list(e) for e in envs]
+    pipeline = [(list(pipeline[0]), pipeline[1])]
+    people_acts = [list(p) for p in people_acts]
+    
+    optimal_acts = 0
+    total_len = 0
+    likelihood, log_likelihood = 0, 0
+    bar = ChargingBar('Computing people data', max=len(envs))
+    for ground_truth, actions in zip(envs, people_acts):
+        env = TrialSequence(1, pipeline, ground_truth=[ground_truth]).trial_sequence[0]
+        likelihood_seq, ll_seq = 0, 0
+        
+        for act in actions:
+            total_len += 1
+            unobserved_nodes = env.get_unobserved_nodes()
+            unobserved_node_labels = [node.label for node in unobserved_nodes]
+            random_distr = softmax([1./len(unobserved_nodes) for _ in range(len(unobserved_nodes))])
+            ind = unobserved_node_labels.index(act)
+            likelihood_seq += random_distr[ind]
+            ll_seq += np.log(random_distr[ind])
+            
+            env.node_map[act].observe()
+            
+        likelihood += likelihood_seq
+        log_likelihood += ll_seq
+        bar.next()
+    bar.finish()
+    mean_lik = likelihood / total_len
+    geo_mean_lik = np.exp(log_likelihood / total_len)
+    return mean_lik, geo_mean_lik
+
+
+def compute_likelihood_microscope(envs, pipeline, people_acts, weights, softmax_feats, softmax_norm_feats, ids, assignment):
+    envs = [list(e) for e in envs]
+    pipeline = [(list(pipeline[0]), pipeline[1])]
+    people_acts = [list(p) for p in people_acts]
+    
+    with open('data/test_temperatures.pkl', 'rb') as f:
+        test_temps = pickle.load(f)
+    with open('data/train_temperatures.pkl', 'rb') as f:
+        train_temps = pickle.load(f)
+    
+    def softmax2(x, temp):
+        e_x = np.exp((x - np.max(x))/ temp)
+        return e_x / e_x.sum()
+    
+    optimal_acts = 0
+    total_len = 0
+    likelihood, log_likelihood = 0, 0
+    bar = ChargingBar('Computing people data', max=len(envs))
+    for ground_truth, actions, id_ in zip(envs, people_acts, ids):
+        env = TrialSequence(1, pipeline, ground_truth=[ground_truth]).trial_sequence[0]
+        likelihood_seq, ll_seq = 0, 0
+        if id_[0] not in assignment.keys():
+            print('{}: Not in the keys.'.format(id_))
+        else:
+            r = assignment[id_[0]][id_[1]]
+        
+            for act in actions:
+                unobserved_nodes = env.get_unobserved_nodes()
+                unobserved_node_labels = [node.label for node in unobserved_nodes]
+                feature_values = env.get_node_feature_values(unobserved_nodes, 
+                                                             softmax_feats,
+                                                             softmax_norm_feats)
+                dot_product = np.dot(weights[r-1], feature_values.T)
+                if id_[1] < 20:
+                    temp = train_temps[id_[0]]
+                else:
+                    temp = test_temps[id_[0]]
+                softmax_dot = softmax2(dot_product, temp)
+                ind = unobserved_node_labels.index(act)
+                likelihood_seq += softmax_dot[ind]
+                ll_seq += np.log(softmax_dot[ind])
+            
+                env.node_map[act].observe()
+            likelihood += likelihood_seq
+            log_likelihood += ll_seq
+            total_len += len(actions)
+        bar.next()
+    bar.finish()
+    
+    mean_lik = likelihood / total_len
+    geo_mean_lik = np.exp(log_likelihood / total_len)
+    return mean_lik, geo_mean_lik
 
     
 def compute_log_likelihood(envs, pipeline, people_acts, formula, epsilon_formula, 
@@ -861,7 +966,7 @@ def compute_all_data_log_likelihood(weights, lik_matrix):
     return data_log_liks
 
 def compute_scores(formula, weights, pipeline, softmax_features, 
-                   softmax_normalized_features, envs, people_acts, verbose=True):
+                   softmax_normalized_features, envs, people_acts, ids, freq, verbose=True):
     """
     Extract human data belonging to a particular cluster found with the EM 
     algorithm.
@@ -878,6 +983,8 @@ def compute_scores(formula, weights, pipeline, softmax_features,
     (See load_participant_data)
     envs : [ [ int ] ]
     people_acts : [ [ int ] ]
+    ids : [ [ int ] ]
+    freq: { int : float }
         
     Returns
     -------
@@ -925,7 +1032,37 @@ def compute_scores(formula, weights, pipeline, softmax_features,
                                         people_acts=tuple(tuple(a) for a in people_acts), 
                                         formula=formula,
                                         verbose=verbose)
-    ll_ppl, opt_score_ppl, ml_ppl, epsilon, opt_act_score = res
+    ll_ppl, opt_score_ppl, ml_ppl, epsilon, opt_act_score, m_lik, geo_m_lik = res
+    
+    with open('./data/v1.0_strategies.pkl', 'rb') as f:
+        assignment = pickle.load(f)
+    assignment[103] = [22, 31, 31, 31, 31, 31, 12, 6, 6, 6, 31, 31, 6, 6, 6, 6, 6] + \
+                      [ 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 76]
+                      
+    with open('./data/microscope_weights.pkl', 'rb') as f:
+        wgts = pickle.load(f)
+    with open('./data/microscope_features.pkl', 'rb') as f:
+        fts = pickle.load(f)
+    
+    res = compute_likelihood_microscope(envs=tuple(tuple(e) for e in envs), 
+                                        pipeline=(tuple(pipeline[0][0]), pipeline[0][1]), 
+                                        people_acts=tuple(tuple(a) for a in people_acts),
+                                        weights=wgts,
+                                        softmax_feats=fts,
+                                        softmax_norm_feats=softmax_normalized_features,
+                                        ids=ids,
+                                        assignment=assignment)
+    micro_m_lik, micro_geo_m_lik = res
+                                             
+    res = compute_likelihood_random(envs=tuple(tuple(e) for e in envs), 
+                                    pipeline=(tuple(pipeline[0][0]), pipeline[0][1]), 
+                                    people_acts=tuple(tuple(a) for a in people_acts))
+    rand_m_lik, rand_geo_m_lik = res
+    
+    lik_imp = m_lik / rand_m_lik
+    geo_lik_imp = geo_m_lik / rand_geo_m_lik
+    micro_lik_imp = micro_m_lik / rand_m_lik
+    micro_geo_lik_imp = micro_geo_m_lik / rand_geo_m_lik
     
     results = ''
     results += "\nFORMULA\n\nLL soft: {}\nLL greedy: {}\n".format(ll_soft, ll_greedy) + \
@@ -948,7 +1085,14 @@ def compute_scores(formula, weights, pipeline, softmax_features,
     results += 'PEOPLE\n\nLL: {}\nScore LL: {}\n'.format(ll_ppl, people_ll_score) + \
                'Opt score: {}\nMean len: {}\nEpsilon: {}\n'.format(opt_score_ppl, 
                                                                    ml_ppl, epsilon) + \
-               'Opt action score: {}'.format(opt_act_score)
+               'Opt action score: {}\n\n\n'.format(opt_act_score) + \
+               'COMPARISON\n\nMean lik: {}\nMicroscope: {}\n'.format(m_lik, micro_m_lik) + \
+               'Random: {}\nImprovement: {} vs {}'.format(rand_m_lik, lik_imp, micro_lik_imp) + \
+               '\n\nGeo lik: {}\nMicroscope: {}\n'.format(geo_m_lik, micro_geo_m_lik) + \
+               'Random: {}\n'.format(rand_geo_m_lik) + \
+               'Improvement: {} vs {}\n\n\n'.format(geo_lik_imp, micro_geo_lik_imp)
+              
+    results += 'SIZE: {}'.format(freq)
            
     if verbose: print(results)
       
@@ -989,10 +1133,10 @@ if __name__ == "__main__":
     
     formula = 'among(st, act, lambda st, act: not(is_observed(st, act)), lambda st, act, lst: has_parent_highest_value(st, act, lst)) AND NEXT True UNTIL IT STOPS APPLYING\n\nLOOP FROM among(lambda st, act: not(is_observed(st, act)), lambda st, act, lst: has_parent_highest_value(st,act,lst))'
     
-    envs, action_seqs = load_participant_data(exp_id=args.experiment_id,
-                                              num_clust=args.num_strategies,
-                                              num_part=args.num_participants,
-                                              clust_id=args.strategy_num)
+    envs, action_seqs, pt = load_participant_data(exp_id=args.experiment_id,
+                                                 num_clust=args.num_strategies,
+                                                 num_part=args.num_participants,
+                                                 clust_id=args.strategy_num)
     
     res = load_EM_data(exp_num=args.experiment_id, 
                        num_strategies=args.num_strategies,
@@ -1007,4 +1151,5 @@ if __name__ == "__main__":
                    envs=envs,
                    people_acts=action_seqs,
                    softmax_features=features,
-                   softmax_normalized_features=normalized_features)
+                   softmax_normalized_features=normalized_features,
+                   ids=pt)

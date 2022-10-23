@@ -497,6 +497,7 @@ class SamplingMachine(object):
         self.clustering_methods = {'mean_shift': cluster_mean_shift, 
                                    'hierarchical': cluster_hierarchical}
         self.clustering_value = None
+        self.cluster_history = {}
 
         def mse_crossentropy_loss(pred_state, target_state, pred_act, target_act):
             state_sum_diff = ((pred_state - target_state) ** 2).sum()
@@ -1028,31 +1029,45 @@ class SamplingMachine(object):
         sep = "\n                    "
         for c in clusters:
             counter += 1
-            res = self.sample_from_clusters(num_samples=split,
-                                            all_data=all_demos,
-                                            pos_validation=True, 
-                                            neg_validation=True,
-                                            which_cluster=counter)
-            positive_samples, val_positive_samples = res[0], res[1]
-            negative_samples, val_negative_samples = res[2], res[3]
-            z = 0
-            for d in positive_samples:
-                if d[1] == 0: z += 1
+            
+            cluster_data = [data[i] for i in range(len(data)) if labels[i] == c]
+            cluster_indices = tuple([i for i in range(len(data)) if labels[i] == c])
+            hashed = hash(cluster_indices)
+            if hashed in self.cluster_history.keys():
+                cluster_formula, value_formula = self.cluster_history[hashed]
+                
+            else:
+                res = self.sample_from_clusters(num_samples=split,
+                                                all_data=all_demos,
+                                                pos_validation=True, 
+                                                neg_validation=True,
+                                                which_cluster=counter)
+                positive_samples, val_positive_samples = res[0], res[1]
+                negative_samples, val_negative_samples = res[2], res[3]
+                z = 0
+                for d in positive_samples:
+                    if d[1] == 0: z += 1
 
-            cluster_data = {'pos': positive_samples,
-                            'neg': negative_samples}
-            val_cluster_data = {'pos': val_positive_samples,
-                                'neg': val_negative_samples}
+                cluster_data = {'pos': positive_samples,
+                                'neg': negative_samples}
+                val_cluster_data = {'pos': val_positive_samples,
+                                    'neg': val_negative_samples}
 
-            if verbose: print(sep +"Checking formulas " + \
-                              "with max depth {}\n".format(max_depth))
+                if verbose: print(sep +"Checking formulas " + \
+                                  "with max depth {}\n".format(max_depth))
+                print("Wrapper train bro")
 
-            cluster_formula, value_formula = wrapper_train(max_depth,
-                                                           cluster_data, 
-                                                           val_cluster_data,
-                                                           verbose=verbose,
-                                                           pred_data=[self.pipeline_X,
-                                                                      self.pipeline_y])
+                cluster_formula, value_formula = wrapper_train(max_depth,
+                                                               cluster_data, 
+                                                               val_cluster_data,
+                                                               verbose=verbose,
+                                                               pred_data=[self.pipeline_X,
+                                                                          self.pipeline_y])
+                print("Trained wrapper")
+                print("Adding to hashed dict")
+                self.cluster_history[hashed] = (cluster_formula, value_formula)
+                print("Added")
+                
             if cluster_formula is not None:
                 print(cluster_formula)
 

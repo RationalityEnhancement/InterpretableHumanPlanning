@@ -8,7 +8,7 @@ import os
 import gc
 
 
-def cluster_human_data(exp_id, num_participants, num_clusters, block):
+def cluster_human_data(exp_id, num_participants, num_clusters, block, info):
     """
     Make a call to the function performing EM clustering of the state-action
     pairs and save the resulting cluster parameters in the appropriate folder.
@@ -26,8 +26,11 @@ def cluster_human_data(exp_id, num_participants, num_clusters, block):
         Part of the experiment from which the data was taken (for ex. 'test'). 
         Depends on which identifiers have been used in the experiment
     """
-    d = f"clustering/em_clustering_results/{exp_id}/{num_clusters}_{num_participants}.pkl"
+    d = f"clustering/em_clustering_results/{exp_id}/{num_clusters}_{num_participants}" + \
+        info + ".pkl"
     b = ' '
+    print(d)
+    print(os.path.isfile(d))
     if not(os.path.isfile(d)):
         print("\n\n\n" + b*25 + "CLUSTERING DATA TO {} CLUSTERS\n".format(num_clusters))
         res = compute_clusters(exp_id, num_participants, num_clusters, block)
@@ -35,7 +38,7 @@ def cluster_human_data(exp_id, num_participants, num_clusters, block):
         save_clusters_data(exp_id=exp_id, num_cl=num_clusters, 
                            num_p=num_p, labels=labels, log_lik=ll, 
                            participant_data=[pd_env, pd_cl, pd_pt],
-                           smm_params=params)
+                           smm_params=params, info=info)
     print("\n\n\n" + b*25 + "CLUSTERING DATA TO {}".format(num_clusters) + \
           " CLUSTERS COMPLETED\n")
     
@@ -63,20 +66,16 @@ def rename_strategy_file(exp_id, best_cl, num_participants,
         Additional test to add to the name of the file
     """
     cwd = os.getcwd()
-    fileprefix = "strategies_" + exp_id + "_" + str(best_cl) + "_" + \
-                 str(num_participants) + "_" + str(num_trajs)
-    if info != '':
-        end = "_" + info + ".txt"
-    else:
-        end = ".txt"
-    filename = fileprefix + end
+    filename = "strategies_" + exp_id + "_" + str(best_cl) + "_" + \
+                 str(num_participants) + "_" + str(num_trajs) + info + '.txt'
+
     newfilename = 'BEST_' + filename
     filepath = cwd + '/interprets_procedure/' + filename
     newfilepath = cwd + '/interprets_procedure/' + newfilename
     os.rename(filepath, newfilepath)
                            
                            
-def model_selection(exp_id, num_participants, block, max_num_clusters, num_trajs, 
+def model_selection(run, exp_id, num_participants, block, max_num_clusters, num_trajs, 
                     max_div, interpret_size, tolerance, num_rollouts, num_samples,
                     num_cands, cand_clusters, elbow_choice, expert_rew, info, log,
                     criterion='marginal', ignore_none=True, begin=1):
@@ -133,13 +132,21 @@ def model_selection(exp_id, num_participants, block, max_num_clusters, num_trajs
     begin : int (optional),
         Which number of clusters to start consider first
     """
+    if run != None:
+        if info != '':
+            info_run = "_" + info + "_run" + str(run)
+        else:
+            info_run = "_run" + str(run)
+    else:
+        info_run = "_" + info if info != '' else ''
+        
     best_stats = {'marginal': np.inf, 'AIC': np.inf, 'BIC': np.inf}
     best = 0
     for c in range(begin, max_num_clusters+1):
         if num_participants == 0:
             num_participants = get_num_participants(exp_id, c, block)
-        cluster_human_data(exp_id, num_participants, c, block)
-        c_weights, _ = cluster_importance_weighting(exp_id, c, num_participants)
+        cluster_human_data(exp_id, num_participants, c, block, info_run)
+        c_weights, _ = cluster_importance_weighting(exp_id, c, num_participants, info_run)
         scores, _ =  interpret_evaluate_clusters(experiment_id=exp_id,
                                                  num_strategies=c,
                                                  num_participants=num_participants,
@@ -156,7 +163,7 @@ def model_selection(exp_id, num_participants, block, max_num_clusters, num_trajs
                                                  elbow_method=elbow_choice,
                                                  mean_reward=None,
                                                  expert_reward=expert_rew,
-                                                 info=info,
+                                                 info=info_run,
                                                  log=log)
         log_marginal_likelihood = scores['log_marginal_likelihood']
         model_stats = {'marginal': -1*log_marginal_likelihood, 
@@ -170,14 +177,18 @@ def model_selection(exp_id, num_participants, block, max_num_clusters, num_trajs
                best_stats = model_stats.copy()
         gc.collect()
     
-    if log:        
-        rename_strategy_file(exp_id, best, num_participants, num_trajs, info)
+    if log:
+        if begin != max_num_clusters:
+            rename_strategy_file(exp_id, best, num_participants, num_trajs, info_run)
     print('\n\n'+' '*25 +'SELECTED MODEL: {} CLUSTERS, '.format(best) + \
           'LOG MARGINAL LIKELIHOOD: {}, '.format(-1*best_stats['marginal']) + \
           'AIC: {}, BIC: {}'.format(best_stats['AIC'], best_stats['BIC']))
                                                                                                         
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
+    parser.add_argument('--run', '-r',
+                        help='Run number',
+                        default=None)
     parser.add_argument('--experiment_id', '-e',
                         type=str,
                         help="Identifier of the experiment to interpret.")
@@ -261,7 +272,8 @@ if __name__ == "__main__":
                         
     args = parser.parse_args()
     
-    model_selection(exp_id=args.experiment_id,
+    model_selection(run=args.run,
+                    exp_id=args.experiment_id,
                     num_participants=args.num_participants,
                     block=args.block,
                     max_num_clusters=args.max_num_strategies,

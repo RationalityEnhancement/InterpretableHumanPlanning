@@ -534,15 +534,15 @@ def dnf2conj_list(program_string, paran=True):
         c = -1
         for pred in dnf:
             c += 1
-            if 'not (not' in pred:
-                dnf[c] = pred[9:-2]
             if 'not(not' in pred:
                 dnf[c] = pred[8:-2]
+                if dnf[c][-1] == 'c':
+                    dnf[c] += 't)'
             if re.match('among', pred):
                 open_ = sum([el == '(' for el in pred])
                 close_ = sum([el == ')' for el in pred])      
                 if not re.search(':', pred) and not re.search('and', pred) and open_ == close_:
-                        dnf[c] = pred[6:]         
+                        dnf[c] = pred[6:]
     for dnf in preds_in_dnfs: ##correcting for among(A and B: C)
         c = -1
         real_preds = []

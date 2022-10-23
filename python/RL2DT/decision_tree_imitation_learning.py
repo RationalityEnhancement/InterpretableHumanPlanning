@@ -340,18 +340,22 @@ def train(program_gen_step_size, num_programs, num_dts, max_num_particles,
     float (optional)
         Log prior of the best program
     """
-
+    print('Getting program set')
     programs, program_prior_log_probs = get_program_set(num_programs, verbose=verbose)
+    print('Got it')
 
     input_demonstrations = input_demos
     further_demonstrations = further_demos['pos']
 
+    print('Running programs or copying the data')
     if pred_data != [None, None]:
         X, y = pred_data[0], pred_data[1]
     else:
         X, y = run_all_programs_on_demonstrations(num_programs, 
                                                   input_demonstrations,
                                                   verbose=verbose)
+    print('Ran that shit')
+    print('Learn the goddamn plps')
     plps, plp_priors = learn_plps(X, 
                                   y, 
                                   programs, 
@@ -360,20 +364,27 @@ def train(program_gen_step_size, num_programs, num_dts, max_num_particles,
                                   program_generation_step_size=program_gen_step_size,
                                   tree_depth=tree_depth,
                                   verbose=verbose)
+    print('Easy')
+    print('Maybe likelihoods?')
 
     likelihoods = compute_likelihood_plps(plps, further_demonstrations)
 
     particles = []
     particle_log_probs = []
+    print('No probs')
+    print('Just adding to particle list')
 
     for plp, prior, likelihood in zip(plps, plp_priors, likelihoods):
         particles.append(plp)
         particle_log_probs.append(prior + likelihood)
+    print('Done adding')
 
     if verbose: print("\nDone!")
+    print('Taking argmax')
     map_idx = np.argmax(particle_log_probs).squeeze()
     if verbose: print("MAP program ({}):".format(np.exp(particle_log_probs[map_idx])))
 
+    print('Selecting particles')
     top_particles, top_particle_log_probs = select_particles(particles, 
                                                              particle_log_probs, 
                                                              max_num_particles)
@@ -381,6 +392,7 @@ def train(program_gen_step_size, num_programs, num_dts, max_num_particles,
         if verbose: 
             print(top_particles[i])
             print("\n")
+    print('Some simple stuff')
     if len(top_particle_log_probs) > 0:
         value = np.array(top_particle_log_probs) - logsumexp(top_particle_log_probs)
         top_particle_log_probs = value
@@ -390,6 +402,7 @@ def train(program_gen_step_size, num_programs, num_dts, max_num_particles,
     else:
         if verbose: print("no nontrivial particles found")
         policy = PLPPolicy([StateActionProgram("False")], [1.0])
+    print('Done simple stuff')
 
     if len(top_particles) != 0:
         if not return_prior:

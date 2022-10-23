@@ -15,6 +15,105 @@ from RL2DT.strategy_demonstrations import make_modified_env as make_env
 from scipy.special import softmax
 from IHP.modified_mouselab import TrialSequence
 
+def strategies_freqs():
+    strat = {}
+    with open('/home/julian/Pobrane/v1.0_strategies.pkl', 'rb') as f:
+        assignment = pickle.load(f)
+    with open('/home/julian/Pobrane/strategy_si_map.pkl', 'rb') as f:
+        ssim = pickle.load(f)
+    assignment[103] = [22, 31, 31, 31, 31, 31, 12, 6, 6, 6, 31, 31, 6, 6, 6, 6, 6, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 76]
+    
+    for val in assignment.values():
+        for el in val:
+            if el in strat.keys():
+                strat[el] += 1
+            else:
+                strat[el] = 1
+                
+    num_seqs = sum(strat.values())
+    freqs = {s: round(float(v)/num_seqs, 4) for s, v in strat.items()}
+    sorted_freqs = {ssim[k]: v for k, v in sorted(freqs.items(), key=lambda item: item[1])}
+    print(sorted_freqs)
+    
+{56: 0.0002, 
+ 55: 0.0002, 
+ 70: 0.0002, 
+ 73: 0.0002, 
+ 39: 0.0004, 
+ 37: 0.0004, 
+ 10: 0.0004, 
+ 31: 0.0006, 
+ 47: 0.0006, 
+ 29: 0.0008, 
+ 60: 0.0008, 
+ 63: 0.0008, 
+ 26: 0.001, 
+ 45: 0.001, 
+ 64: 0.001, 
+ 30: 0.001, 
+ 28: 0.001, 
+ 51: 0.0012, 
+ 52: 0.0014, 
+ 21: 0.0014, 
+  8: 0.0014, 
+ 27: 0.0014, 
+ 74: 0.0016, 
+ 41: 0.0016, 
+ 38: 0.0018, 
+ 19: 0.0018, 
+ 25: 0.0018, 
+ 48: 0.002, 
+ 20: 0.002, 
+ 33: 0.002, 
+ 76: 0.0022, 
+ 77: 0.0022, 
+ 24: 0.0024, 
+ 32: 0.0026, 
+ 61: 0.003, 
+ 43: 0.003, 
+ 58: 0.0032, 
+ 23: 0.0032, 
+ 62: 0.0036, 
+ 46: 0.004, 
+ 35: 0.004, 
+ 44: 0.004, 
+ 22: 0.004, 
+ 79: 0.0048, 
+ 57: 0.0052, 
+ 67: 0.0061, 
+ 59: 0.0065, 
+ 71: 0.0065, 
+ 78: 0.0067, 
+ 15: 0.0071, 
+ 11: 0.0073, 
+ 36: 0.0079, 
+  7: 0.0093, 
+ 16: 0.0097, 
+ 13: 0.0107,
+ 68: 0.0119, 
+ 65: 0.0121, 
+ 34: 0.0123, 
+ 49: 0.0137, 
+ 18: 0.0141, 
+ 14: 0.0168, 
+ 66: 0.0182, 
+ 75: 0.0194, 
+ 17: 0.0204, 
+ 53: 0.0208, 
+ 40: 0.0208, 
+ 54: 0.0212, 
+ 69: 0.0214, 
+  9: 0.022,
+ 42: 0.0374, 
+ 12: 0.0622, 
+ 50: 0.1308, 
+ 6: 0.3638}
+ 
+# Found: 6, 50, 42, 68, 32, 67,40, 54
+#        0.3638, 0.1308, 0.0374, 0.0119, 0.0026, 0.0061, 0.0208, 0.0212
+        
+
+
 def load_participant_data(exp_id, num_clust, num_part, clust_id):
     """
     Extract human data belonging to a particular cluster found with the EM 

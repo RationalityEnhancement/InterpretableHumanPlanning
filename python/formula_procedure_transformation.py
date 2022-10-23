@@ -104,8 +104,9 @@ def best_until(pred, until_conds, raw_phi, p_envs, p_actions, p_pipeline, unless
             return u
     
     best_lik = -np.inf
-    until_conds2 = [u for u in until_conds if ' or ' not in u]
-    until_conds = until_conds2 if until_conds2 != [] else until_conds
+    until_conds_simp = [u for u in until_conds if ' or ' not in u]
+    until_conds_comp = [u for u in until_conds if ' or ' in u]
+    until_conds = until_conds_simp + until_conds_comp
     for ind, u in enumerate(until_conds):
         if not(unless):
             tst_raw = raw_phi + pred + ' UNTIL ' + u + \
@@ -127,6 +128,9 @@ def best_until(pred, until_conds, raw_phi, p_envs, p_actions, p_pipeline, unless
         if res[0] > best_lik:
             best_u = u
             best_lik = res[0]
+
+    if best_lik == -np.inf:
+        best_u = 'IT STOPS APPLYING'
 
     return best_u
 
@@ -465,7 +469,7 @@ def temporalize(phi, trajs, predicate_matrix, redundant_preds, pred_types=None,
     alternatives = phi.split(' or ')
     n = len(trajs)
     phi_new = False
-    M, L, W, I = [[]] * n, [[]] * n, [[]] * n, []
+    M, L, W, I = [], [], [], []
     C = {}
     counter = -1
     print('Dividing demos based on the used strategy...')
@@ -513,9 +517,11 @@ def temporalize(phi, trajs, predicate_matrix, redundant_preds, pred_types=None,
                 seq += [beta]
             else:
                 l += 1
-        M[i] = seq
-        L[i] = L_ex
-        W[i] = W_ex
+        if seq == []:
+            seq = ['None']
+        M.append(seq)
+        L.append(L_ex)
+        W.append(W_ex)
     
     C = {key: list(unique(val)) for key, val in C.items()}
     return M, L, W, C, I, alpha
@@ -858,7 +864,7 @@ def compact(betas_sequences, betas_lengths, betas_whens):
         new_betas_seq = [bs[j] for j in tally.keys()]
         new_betas_len = [sum([betas_lengths[i][j] for j in dups]) 
                          for dups in tally.values()]
-        new_betas_when = [betas_whens[i][j] for j in tally.keys()]
+        new_betas_when = [betas_whens[i][j] for j in tally.keys() if j < len(betas_whens[i])]
         if len(betas_whens[i]) > len(bs):
             new_betas_when.append(betas_whens[i][-1])
         new_betas_sequences.append(new_betas_seq)
@@ -871,7 +877,7 @@ class EquivalenceClass:
     For representing equivalence relation as being a subsequence of some given
     sequence.
     
-    Sequence needs to have a form a_1, ..., (a_i, ..., a_n)* and be repreesnted
+    Sequence needs to have a form a_1, ..., (a_i, ..., a_n)* and be represented
     as a list [a_1, ..., a_i, ..., a_n, LOOP FROM a_i]
     
     Contains additional statistics associated with the elements in the same 
@@ -973,7 +979,8 @@ def unroll_connections(connections, starts, max_len):
         candidates += paths
     representations = synthesize(candidates)
     equiv_classes = [EquivalenceClass(rep = repp, elts=[], whens=[], 
-                                      lens=[], traj_elts=[]) for repp in representations]
+                                      lens=[], traj_elts=[]) for repp in representations
+                                      if repp != 'None']
     firsts = list(unique([e.first for e in equiv_classes]))
     new_equiv_classes = copy.deepcopy(equiv_classes)
     for f in firsts:
@@ -1061,25 +1068,27 @@ def trajs_quotient(betas_sequences, betas_lengths, betas_connections, betas_when
     max_len = max([len(seq) for seq in betas_sequences])
     equiv_classes = unroll_connections(betas_connections, betas_starts, max_len)
     if verbose:
-        for e in equiv_classes:
-            for et in e.representation+e.loop:
-                print(et)
-            print("\n")
+        print("{} equivalence classes found\n".format(len(equiv_classes)))
     for i in range(n):
+        if verbose: print("Determining which classes demo {} belongs to".format(i))
         belongingness = [is_included_loop(betas_sequences[i], e.representation+e.loop) 
                          for e in equiv_classes]
-        try:
-            #cls = belongingness.index(True) ## the culprit; adds an elem to 1 rep
-            for cls, belong in enumerate(belongingness):
-                if belong:
-                    equiv_classes[cls].append(betas_sequences[i], betas_lengths[i], 
+        add = 0
+        for cls, belong in enumerate(belongingness):
+            if belong:
+                equiv_classes[cls].append(betas_sequences[i], betas_lengths[i], 
                                               betas_whens[i], trajs[i])
-        except:
+                add += 1
+        if add == 0:
             if verbose: print('Procedural representation-incompatible demo...')
             limit -= 1
+        else:
+            if verbose: print('Found {} classes for the demo'.format(add))
     equiv_classes = [e for e in equiv_classes if len(e.elements)>0]
     [e.update() for e in equiv_classes]
-    if limit < int(n/2) or equiv_classes == []:
+    ## we could use the limit to check if there weren't too many incompatible demos
+    ## bu we stick to a rule, that even one compatible demo is good enough
+    if equiv_classes == []:
         return None
     return equiv_classes
 
@@ -1244,6 +1253,7 @@ def DNF2LTL(phi, trajs, predicate_matrix, allowed_predicates, p_envs, p_actions,
                                        redundant_predicate_types,
                                        noRedundancy)
     starts = list(unique([seq[0] for seq in M]))
+    starts = [s for s in starts if s != 'None']
     M, L, W = compact(betas_sequences=M, betas_lengths=L, betas_whens=W)
     equiv_classes = trajs_quotient(betas_sequences=M, 
                                    betas_lengths=L, 
@@ -1252,16 +1262,17 @@ def DNF2LTL(phi, trajs, predicate_matrix, allowed_predicates, p_envs, p_actions,
                                    betas_starts=starts,
                                    trajs=trajs)
     if equiv_classes is None:
-        print("The formula cannot be represented as a procedural program. " + \
-              "Returning the DNF.")
-        parts = phi.split(' or ')
-        output, output_raw = '', ''
-        num_preds = 0
-        for p in parts:
-            output += prettify(p) + " UNTIL IT STOPS APPLYING" + '\n\nOR\n\n'
-            num_preds += size(p)
-            output_raw += p + " UNTIL IT STOPS APPLYING" + '\n\nOR\n\n'
-        return output[:-6], num_preds, output_raw[:-6]
+        print("The formula cannot be represented as a procedural program.")
+        #parts = phi.split(' or ')
+        #output, output_raw = '', ''
+        #num_preds = 0
+        #for p in parts:
+        #    output += prettify(p) + " UNTIL IT STOPS APPLYING" + '\n\nOR\n\n'
+        #    num_preds += size(p)
+        #    output_raw += p + " UNTIL IT STOPS APPLYING" + '\n\nOR\n\n'
+        output = "True UNTIL IT STOPS APPLYING      "
+        output_raw = output
+        return output[:-6], 1, output_raw[:-6]
 
     phi_all = ''
     raw_phi_all = ''
@@ -1275,6 +1286,7 @@ def DNF2LTL(phi, trajs, predicate_matrix, allowed_predicates, p_envs, p_actions,
         print('\n{}: Find a procedural description'.format(num))
         phi_fin = ''
         raw_phi_fin = ''
+        unlesses = None
         for i, beta in enumerate(eqc.full_representation):
             if beta == '': 
                 break
@@ -1356,12 +1368,13 @@ def DNF2LTL(phi, trajs, predicate_matrix, allowed_predicates, p_envs, p_actions,
                     complexity += size(eqc.loop[0][10:])
                     
             if len(eqc.representation) > 1:
-                if prev == i-1:
-                    unless = best_until(beta, unlesses, raw_phi_fin, p_envs, 
+                if prev == i-1 and unlesses != None:
+                    unless = best_until(beta, unlesses, raw_phi_fin, p_envs,
                                         p_actions, p_pipeline, unless=True)
-                    phi_fin += ' UNLESS ' + prettify(unless)
-                    raw_phi_fin += ' UNLESS ' + unless
-                    complexity += size(unless)
+                    if unless != 'IT STOPS APPLYING':
+                        phi_fin += ' UNLESS ' + prettify(unless)
+                        raw_phi_fin += ' UNLESS ' + unless
+                        complexity += size(unless)
                 if "LOOP" not in beta:
                     whens, traj_elts = eqc.ending_with_beta_whens_traj_elements(beta)
                     if whens != [] and len(traj_elts) != len(eqc.traj_elements):
@@ -1372,7 +1385,7 @@ def DNF2LTL(phi, trajs, predicate_matrix, allowed_predicates, p_envs, p_actions,
                                                   allowed_predicates, I)
                             prev = i
                         except:
-                            unlesses = ['False']
+                            unlesses = None
 
         phi_all += '\n\nOR\n\n' + phi_fin if num != 0 else phi_fin
         raw_phi_all += '\n\nOR\n\n' + raw_phi_fin if num != 0 else raw_phi_fin

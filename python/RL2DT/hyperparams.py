@@ -36,7 +36,7 @@ BASE_NUM_DEMOS = 64
 
 ## (hyper)parameters for AI-Interpret
 NUM_PROGRAMS = 14206
-NUM_ROLLOUTS = 10000
+NUM_ROLLOUTS = 5000
 NUM_CLUSTERS = list(range(1,26)) + [30,40,50,75,100,200,300]
 NUM_CANDIDATES = 4
 ORDER = 'value'

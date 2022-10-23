@@ -29,5 +29,11 @@ To generate descriptions of N clusters without performing model selection run th
 python3 pipeline.py --experiment v1.0 --max_num_strategies N --begin N --num_participants 0 --num_demos 128 --expert_reward 39.97
 ```
 
+To run the code effectively first generate descriptions of ```cpp for\{ i=0; i<N+1; ++i}``` clusters, and then perform model selection, i.e.
+```bash
+python3 pipeline.py --experiment v1.0 --max_num_strategies i --begin i --num_participants 0 --num_demos 128 --expert_reward 39.97
+python3 pipeline.py --experiment v1.0 --max_num_strategies N --begin 1 --num_participants 0 --num_demos 128 --expert_reward 39.97
+```
+
 ## Disclaimer
 With the additional data downloaded in the previous steps, expect the model selection to run for around 24-32 hours (procedural formula evaluation is the most time-consuming operation). To run the complete model selection without the data, expect around 40 days. When running the code with the downloaded folder and creating descriptions for N clusters only, the code should run for around 1-3 hours.

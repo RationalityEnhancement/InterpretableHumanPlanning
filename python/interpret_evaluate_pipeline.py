@@ -350,13 +350,13 @@ def quality_function(binary_vector, modular_rep, pred_ids, people_data, pipeline
                                people_acts=tuple(tuple(a) for a in action_seqs), 
                                formula=selected_formula_raw,
                                verbose=False)
-    ll_ppl, opt_score_ppl, ml_ppl, eps, opt_score_people = res
+    ll_ppl, opt_score_ppl, ml_ppl, eps, opt_score_people, mn_lik, mn_g_lik = res
     
     score = ll_ppl - sum(binary_vector)
     return -score #genetic algorithm minimizes by default
 
 def simplify_and_optimize(formula, formula_raw, exp_id, num_str, 
-                          num_part, str_num, pipeline, algorithm='greedy'):
+                          num_part, str_num, pipeline, info, algorithm='greedy'):
     """
     Prune the input formula to finds its simpler representation which achieves 
     higher or equal log likelihood.
@@ -396,10 +396,11 @@ def simplify_and_optimize(formula, formula_raw, exp_id, num_str,
     """
     assert algorithm in ['greedy', 'ga'], "algorithm needs to be 'greedy' or 'ga'" + \
         " not {}".format(algorithm)
-    envs, action_seqs = load_participant_data(exp_id=exp_id,
-                                              num_clust=num_str,
-                                              num_part=num_part,
-                                              clust_id=str_num)
+    envs, action_seqs, _ = load_participant_data(exp_id=exp_id,
+                                                 num_clust=num_str,
+                                                 num_part=num_part,
+                                                 clust_id=str_num,
+                                                 info=info)
     p_data = (envs, action_seqs)
     modular_formula_rep, predicate_ids = represent_modular(formula, formula_raw)
     
@@ -451,10 +452,12 @@ def wrapper_evaluate_procedural_formula(**kwargs):
     """
     print("\n\n\n\n\n                                " +\
           " EVALUATING THE PROCEDURAL FORMULA: \n\n\n\n\n")
-    envs, action_seqs = load_participant_data(exp_id=kwargs['experiment_id'],
-                                              num_clust=kwargs['num_strategies'],
-                                              num_part=kwargs['num_participants'],
-                                              clust_id=kwargs['strategy_num'])
+    envs, action_seqs, pt, freq = load_participant_data(exp_id=kwargs['experiment_id'],
+                                                        num_clust=kwargs['num_strategies'],
+                                                        num_part=kwargs['num_participants'],
+                                                        clust_id=kwargs['strategy_num'],
+                                                        info=kwargs['info'],
+                                                        freqs=True)
 
     res = compute_scores(formula=kwargs['raw_formula'], 
                          weights=kwargs['weights'], 
@@ -462,7 +465,9 @@ def wrapper_evaluate_procedural_formula(**kwargs):
                          softmax_features=kwargs['softmax_features'],
                          softmax_normalized_features=kwargs['softmax_normalized_features'],
                          envs=envs,
-                         people_acts=action_seqs)
+                         people_acts=action_seqs,
+                         ids=pt,
+                         freq=freq)
     return res
 
 def wrapper_interpret_cluster_to_procedural_description(**kwargs):
@@ -525,7 +530,8 @@ def wrapper_interpret_cluster_to_procedural_description(**kwargs):
                                     num_str=kwargs['num_strategies'],
                                     num_part=kwargs['num_participants'],
                                     str_num=kwargs['strategy_num'],
-                                    pipeline=pipeline)
+                                    pipeline=pipeline,
+                                    info=kwargs['info'])
         part_proc_formula, part_raw_proc_formula, ll = res
         if ll > best_ll:
             new_proc_formula = part_proc_formula
@@ -546,7 +552,8 @@ def wrapper_interpret_cluster_to_procedural_description(**kwargs):
                                               weights=weights,
                                               pipeline=pipeline,
                                               softmax_features=feats,
-                                              softmax_normalized_features=normalized_feats)
+                                              softmax_normalized_features=normalized_feats,
+                                              info=kwargs['info'])
     _, _, _, _, _, _, _, evaluation_log = res
     strategy_log = 'STRATEGY {}/{}: {}\n\nComplexity: {}'.format(kwargs['strategy_num'],
                                                                  kwargs['num_strategies'],
@@ -590,7 +597,7 @@ def save_strategies_and_evaluation(filepath, filename, data, append=True):
             strategies.write(data)
             strategies.write("\n\n")
             
-def cluster_importance_weighting(exp_id, num_clust, num_p):
+def cluster_importance_weighting(exp_id, num_clust, num_p, info):
     """
     Establish the proportion of demonstrations each of the num_clust clusters 
     encoding a planning strategy from experiment exp_id covers. 
@@ -613,7 +620,8 @@ def cluster_importance_weighting(exp_id, num_clust, num_p):
     all_ : int
         Number of all human demonstrations/planning operations
     """
-    cluster_folder = f"clustering/em_clustering_results/{exp_id}/{num_clust}_{num_p}.pkl"
+    cluster_folder = f"clustering/em_clustering_results/{exp_id}/{num_clust}_{num_p}{info}.pkl"
+        
     with open(cluster_folder, 'rb') as handle:
         dict_object = pickle.load(handle)
     dct = dict_object[0]
@@ -673,14 +681,9 @@ def interpret_evaluate_clusters(log, **kwargs):
         As above but values are averaged over all the clusters
     """
     cwd = os.getcwd()
-    fileprefix = "strategies_" + kwargs['experiment_id'] + "_" + \
-                 str(kwargs['num_strategies']) + "_" + str(kwargs['num_participants']) + \
-                 "_" + str(kwargs['num_trajs'])
-    if kwargs['info'] != '':
-        end = "_" + kwargs['info'] + ".txt"
-    else:
-        end = ".txt"
-    filename = fileprefix + end
+    filename = "strategies_" + kwargs['experiment_id'] + "_" + \
+               str(kwargs['num_strategies']) + "_" + str(kwargs['num_participants']) + \
+               "_" + str(kwargs['num_trajs']) + kwargs['info'] + '.txt'
     
     all_mlik, all_opt, all_ppl_mlik, all_ppl_lik, all_ppl_opt = {}, {}, {}, {}, {}
     all_ppl_act, all_w = {}, {}
@@ -690,19 +693,21 @@ def interpret_evaluate_clusters(log, **kwargs):
     num_strategies = kwargs['num_strategies']
     c_weights, num_data = cluster_importance_weighting(exp_id=kwargs['experiment_id'], 
                                                        num_clust=num_strategies, 
-                                                       num_p=kwargs['num_participants'])
+                                                       num_p=kwargs['num_participants'],
+                                                       info=kwargs['info'])
     print('SIZES: {}, {}'.format(kwargs['num_strategies'], num_data))
     lik_matrix = np.zeros((kwargs['num_strategies'], num_data)) 
-    def load_all_data(exp_id, num_clust, num_part):
+    def load_all_data(exp_id, num_clust, num_part, info):
         envs = []
         action_seqs = []
         for clust_id in range(num_clust):
-            e, a = load_participant_data(exp_id, num_clust, num_part, clust_id)
+            e, a, _ = load_participant_data(exp_id, num_clust, num_part, clust_id, info)
             envs += e
             action_seqs += a
         return envs, action_seqs
         
-    all_envs, all_seqs = load_all_data(kwargs['experiment_id'], kwargs['num_strategies'],kwargs['num_participants'])
+    all_envs, all_seqs = load_all_data(kwargs['experiment_id'], kwargs['num_strategies'],kwargs['num_participants'],
+                                       kwargs['info'])
     
     for i in range(num_strategies):
 

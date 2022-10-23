@@ -1,7 +1,7 @@
 import itertools
 
 ## Parameters used to find a procedural representation of a DNF formula
-ITERS = 10000
+ITERS = 1000
 THRESHOLD = 0.5
 ALLOWED_PREDS = ['is_previous_observed_max(st, act)',
                   'is_positive_observed(st, act)',

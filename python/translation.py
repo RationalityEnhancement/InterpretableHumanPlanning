@@ -107,18 +107,20 @@ def unit_pred2expr(predicate_str, unit=False, first_conj=False,
         
     if 'are_branch' in real_pred:
         if not_ != '':
-            message = 'belonging to a subtree with some unobserved leaves'
+            message = 'to a subtree with some unobserved leaves'
         else:
-            message = 'belonging to a subtree with all leaves already observed'
+            message = 'to a subtree with all leaves already observed'
+        if until:
+            return "this node belongs " + message
         if first_conj or unit:
             if one_step:
-                return 'a node ' + message
+                return 'a node belonging ' + message
             else:
-                return "nodes " + message
+                return "nodes  belonging" + message
         if second_conj:
-            return ' and ' + message
+            return ' and nelonging ' + message
         if special:
-            return ' ' + message
+            return ' belonging ' + message
         return message
 
     if 'is_leaf' in real_pred:
@@ -531,14 +533,14 @@ def among_pred2expr(predicate_str, prev, all_=False, one_step=True):
     
     expr = predicate_str
     if 'has_child_highest' in predicate_str:
-        if all_:
+        if not(all_):
             if one_step:
                 expr = "\n - it has a child with the highest value " + \
                        "considering the children of other " + add
             else:
                 expr = "\n - they have children with the highest values " + \
                        "considering the children of other " + add
-        if all_:
+        else:
             return 'have a child with the same observed value'
     if 'has_child_smallest' in predicate_str:
         if one_step:

@@ -1,6 +1,6 @@
 from interpret_formula import load_EM_data, interpret_human_data
 from formula_procedure_transformation import ConversionError, DNF2LTL, trajectorize
-from evaluate_procedure import load_participant_data, compute_scores
+from evaluate_procedure import load_participant_data
 from formula_visualization import prettify
 from RL2DT.hyperparams import *
 from hyperparams import ALLOWED_PREDS, REDUNDANT_TYPES
@@ -109,16 +109,13 @@ def wrapper_interpret_human_data(**kwargs):
                        num_strategies=kwargs['num_strategies'],
                        num_participants=kwargs['num_participants'],
                        strategy_num=kwargs['strategy_num'],
-                       num_simulations=kwargs['num_trajs'])
+                       num_simulations=kwargs['num_trajs'],
+                       info=kwargs['info'])
     pipeline, weights, features, normalized_features = res
     
     end = kwargs['experiment_id'] + "_" + str(kwargs['strategy_num']) + "_" + \
           str(kwargs['num_strategies']) + "_" + str(kwargs['num_participants']) + \
-          "_" + str(kwargs['num_trajs'])
-    if kwargs['info'] != '':
-        end += "_" + kwargs['info'] + ".pkl"
-    else:
-        end += ".pkl"
+          "_" + str(kwargs['num_trajs']) + kwargs['info'] + ".pkl"
     formula_flnm = "human_" + end
     preds_flnm = "DSL_" + end
     demos_flnm = "human_data_" + end
@@ -189,10 +186,11 @@ def wrapper_compute_procedural_formula(formula, pred_matrix, demos, **kwargs):
     num_pos_demos = sum(pred_matrix[-1])
     pred_pos_matrix = pred_matrix[0][:num_pos_demos]
     
-    envs, action_seqs = load_participant_data(exp_id=kwargs['experiment_id'],
-                                              num_clust=kwargs['num_strategies'],
-                                              num_part=kwargs['num_participants'],
-                                              clust_id=kwargs['strategy_num'])
+    envs, action_seqs, _ = load_participant_data(exp_id=kwargs['experiment_id'],
+                                                 num_clust=kwargs['num_strategies'],
+                                                 num_part=kwargs['num_participants'],
+                                                 clust_id=kwargs['strategy_num'],
+                                                 info=kwargs['info'])
     
     try:
         LTL_formula, c, raw_LTL_formula = DNF2LTL(
