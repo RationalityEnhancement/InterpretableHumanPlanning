@@ -9,7 +9,7 @@ We used Python 3.6.9 and Ubuntu 20.04.
 To install the library, simply clone the repository and use the package manager [pip](https://pip.pypa.io/en/stable/) to install the required packages.
 
 ```bash
-git clone https://github.com/RationalityEnhancement/Interpretable-human-planning.git
+git clone https://github.com/RationalityEnhancement/InterpretableHumanPlanning.git
 cd python
 pip install -r requirements.txt
 ```
